@@ -1,0 +1,38 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+		},
+	],
+	"build_systems": [
+		{
+			"name": "run",
+				"cmd": ["python3", "$project_path/main.py"],
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"selector": "source.python",
+			"working_dir": "$project_path",
+
+			"env": {"PYTHONIOENCODING": "utf-8",},
+
+			"variants":
+			[
+				{
+					"name": "Syntax Check",
+					"cmd": ["python3", "-m", "py_compile", "$file"],
+
+					"windows": {
+						"cmd": ["py", "-m", "py_compile", "$file"],
+					},
+				}
+			],
+		},
+
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "\"python3\" -u \"$file\"",
+		},
+	],
+}

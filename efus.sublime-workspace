@@ -1,0 +1,1072 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.py",
+			"settings":
+			{
+				"buffer_size": 83,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					14,
+					1,
+					"insert",
+					{
+						"characters": "\nin"
+					},
+					"AwAAADsAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAA9AAAAAAAAAAAAAAA9AAAAAAAAAD4AAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA7AAAAAAAAADsAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					15,
+					2,
+					"left_delete",
+					null,
+					"AgAAAD0AAAAAAAAAPQAAAAAAAAABAAAAbjwAAAAAAAAAPAAAAAAAAAABAAAAaQ",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA+AAAAAAAAAD4AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					16,
+					1,
+					"insert",
+					{
+						"characters": "i"
+					},
+					"AQAAADwAAAAAAAAAPQAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA8AAAAAAAAADwAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					17,
+					1,
+					"insert_dimensions",
+					null,
+					"AgAAADwAAAAAAAAAPAAAAAAAAAABAAAAaTwAAAAAAAAAQgAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA9AAAAAAAAAD0AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					18,
+					1,
+					"insert",
+					{
+						"characters": " s"
+					},
+					"AgAAAEIAAAAAAAAAQwAAAAAAAAAAAAAAQwAAAAAAAABEAAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABCAAAAAAAAAEIAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					19,
+					1,
+					"insert",
+					{
+						"characters": "ys"
+					},
+					"AgAAAEQAAAAAAAAARQAAAAAAAAAAAAAARQAAAAAAAABGAAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABEAAAAAAAAAEQAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					20,
+					1,
+					"insert",
+					{
+						"characters": "\n\nsys"
+					},
+					"BQAAAEYAAAAAAAAARwAAAAAAAAAAAAAARwAAAAAAAABIAAAAAAAAAAAAAABIAAAAAAAAAEkAAAAAAAAAAAAAAEkAAAAAAAAASgAAAAAAAAAAAAAASgAAAAAAAABLAAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABGAAAAAAAAAEYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					21,
+					1,
+					"insert",
+					{
+						"characters": "."
+					},
+					"AQAAAEsAAAAAAAAATAAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABLAAAAAAAAAEsAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					57,
+					1,
+					"insert_dimensions",
+					null,
+					"AQAAAEwAAAAAAAAAYQAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABMAAAAAAAAAEwAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					60,
+					1,
+					"cut",
+					null,
+					"AQAAAEwAAAAAAAAATAAAAAAAAAAVAAAAIyEvdXNyL2Jpbi9lbnYgcHl0aG9u",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABhAAAAAAAAAEwAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					66,
+					1,
+					"paste",
+					null,
+					"AQAAAAAAAAAAAAAAFQAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANUA"
+				],
+				[
+					67,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AQAAABUAAAAAAAAAFgAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAVAAAAAAAAABUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					69,
+					1,
+					"insert",
+					{
+						"characters": "#"
+					},
+					"AQAAABUAAAAAAAAAFgAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAVAAAAAAAAABUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					70,
+					1,
+					"left_delete",
+					null,
+					"AQAAABUAAAAAAAAAFQAAAAAAAAABAAAAIw",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAWAAAAAAAAABYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					71,
+					1,
+					"insert",
+					{
+						"characters": "3"
+					},
+					"AQAAABUAAAAAAAAAFgAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAVAAAAAAAAABUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					72,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AQAAABYAAAAAAAAAFwAAAAAAAAAAAAAA",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAWAAAAAAAAABYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					89,
+					2,
+					"left_delete",
+					null,
+					"AgAAAF8AAAAAAAAAXwAAAAAAAAAGAAAACnN5cy4KXgAAAAAAAABeAAAAAAAAAAEAAAAK",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABfAAAAAAAAAGUAAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					91,
+					1,
+					"left_delete",
+					null,
+					"AQAAAFQAAAAAAAAAVAAAAAAAAAAKAAAAaW1wb3J0IHN5cw",
+					"BQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABUAAAAAAAAAF4AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					10,
+					1,
+					"left_delete",
+					null,
+					"AQAAAFMAAAAAAAAAUwAAAAAAAAABAAAACg",
+					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAFQAAAAAAAAAVAAAAAAAAAAAAAAAAGBpQA"
+				],
+				[
+					12,
+					1,
+					"left_delete",
+					null,
+					"AQAAADMAAAAAAAAAMwAAAAAAAAABAAAACg",
+					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAADQAAAAAAAAANAAAAAAAAAAAAAAAAEBqQA"
+				],
+				[
+					14,
+					1,
+					"left_delete",
+					null,
+					"AQAAABYAAAAAAAAAFgAAAAAAAAABAAAACg",
+					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAABcAAAAAAAAAFwAAAAAAAAAAAAAAAKBnQA"
+				],
+				[
+					21,
+					1,
+					"insert",
+					{
+						"characters": "ne"
+					},
+					"AgAAAB4AAAAAAAAAHwAAAAAAAAAAAAAAHwAAAAAAAAAgAAAAAAAAAAAAAAA",
+					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAB4AAAAAAAAAHgAAAAAAAAAAAAAAAADwvw"
+				],
+				[
+					30,
+					1,
+					"insert",
+					{
+						"characters": "v"
+					},
+					"AQAAAB8AAAAAAAAAIAAAAAAAAAAAAAAA",
+					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAB8AAAAAAAAAHwAAAAAAAAAAAAAAAADwvw"
+				],
+				[
+					31,
+					1,
+					"left_delete",
+					null,
+					"AQAAAB8AAAAAAAAAHwAAAAAAAAABAAAAdg",
+					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAACAAAAAAAAAAIAAAAAAAAAAAAAAAAADwvw"
+				],
+				[
+					34,
+					1,
+					"left_delete",
+					null,
+					"AQAAAB4AAAAAAAAAHgAAAAAAAAACAAAAbmU",
+					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAB4AAAAAAAAAIAAAAAAAAAAAAAAAAADwvw"
+				],
+				[
+					4,
+					1,
+					"run_macro_file",
+					{
+						"file": "res://Packages/Default/Add Line.sublime-macro",
+						"register": "\""
+					},
+					"AQAAADIAAAAAAAAAMwAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAxAAAAAAAAADEAAAAAAAAAAAAAAABAakA"
+				],
+				[
+					15,
+					1,
+					"run_macro_file",
+					{
+						"file": "res://Packages/Default/Add Line.sublime-macro",
+						"register": "\""
+					},
+					"AQAAAFIAAAAAAAAAUwAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABRAAAAAAAAAFEAAAAAAAAAAAAAAAAA8L8"
+				]
+			]
+		},
+		{
+			"file": "efus/component.py",
+			"settings":
+			{
+				"buffer_size": 131,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					32,
+					1,
+					"expand_tabs",
+					{
+						"set_translate_tabs": true
+					},
+					"AQAAAAAAAAAAAAAAYAAAAAAAAABUAAAAZnJvbSB0eXBpbmcgaW1wb3J0IEFueQoKY2xhc3MgQ29tcG9uZW50OgoJbmFtZXNwYWNlOiBBbnkKCWRlZiBfX2luaXRfXyhzZWxmKToKCQlwYXNz",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABUAAAAAAAAAFQAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					38,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AQAAABcAAAAAAAAAGAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAXAAAAAAAAABcAAAAAAAAAAAAAAABAY0A"
+				],
+				[
+					43,
+					1,
+					"insert",
+					{
+						"characters": "\n333"
+					},
+					"BQAAACkAAAAAAAAAKgAAAAAAAAAAAAAAKgAAAAAAAAAuAAAAAAAAAAAAAAAuAAAAAAAAAC8AAAAAAAAAAAAAAC8AAAAAAAAAMAAAAAAAAAAAAAAAMAAAAAAAAAAxAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAApAAAAAAAAACkAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					44,
+					3,
+					"left_delete",
+					null,
+					"AwAAADAAAAAAAAAAMAAAAAAAAAABAAAAMy8AAAAAAAAALwAAAAAAAAABAAAAMy4AAAAAAAAALgAAAAAAAAABAAAAMw",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAxAAAAAAAAADEAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					45,
+					1,
+					"insert_snippet",
+					{
+						"contents": "\"$0\""
+					},
+					"AQAAAC4AAAAAAAAAMAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAuAAAAAAAAAC4AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					47,
+					1,
+					"insert",
+					{
+						"characters": "\"\"\"\""
+					},
+					"BAAAADAAAAAAAAAAMQAAAAAAAAAAAAAAMQAAAAAAAAAyAAAAAAAAAAAAAAAyAAAAAAAAADMAAAAAAAAAAAAAADMAAAAAAAAANAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAwAAAAAAAAADAAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					49,
+					1,
+					"insert",
+					{
+						"characters": "Base"
+					},
+					"BAAAADEAAAAAAAAAMgAAAAAAAAAAAAAAMgAAAAAAAAAzAAAAAAAAAAAAAAAzAAAAAAAAADQAAAAAAAAAAAAAADQAAAAAAAAANQAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAxAAAAAAAAADEAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					50,
+					1,
+					"insert",
+					{
+						"characters": " Comp"
+					},
+					"BQAAADUAAAAAAAAANgAAAAAAAAAAAAAANgAAAAAAAAA3AAAAAAAAAAAAAAA3AAAAAAAAADgAAAAAAAAAAAAAADgAAAAAAAAAOQAAAAAAAAAAAAAAOQAAAAAAAAA6AAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA1AAAAAAAAADUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					51,
+					1,
+					"insert",
+					{
+						"characters": "onent"
+					},
+					"BQAAADoAAAAAAAAAOwAAAAAAAAAAAAAAOwAAAAAAAAA8AAAAAAAAAAAAAAA8AAAAAAAAAD0AAAAAAAAAAAAAAD0AAAAAAAAAPgAAAAAAAAAAAAAAPgAAAAAAAAA/AAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA6AAAAAAAAADoAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					52,
+					1,
+					"insert",
+					{
+						"characters": " CLass"
+					},
+					"BgAAAD8AAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAABBAAAAAAAAAAAAAABBAAAAAAAAAEIAAAAAAAAAAAAAAEIAAAAAAAAAQwAAAAAAAAAAAAAAQwAAAAAAAABEAAAAAAAAAAAAAABEAAAAAAAAAEUAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA/AAAAAAAAAD8AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					55,
+					1,
+					"left_delete",
+					null,
+					"AQAAAEEAAAAAAAAAQQAAAAAAAAABAAAATA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABCAAAAAAAAAEIAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					56,
+					1,
+					"insert",
+					{
+						"characters": "l"
+					},
+					"AQAAAEEAAAAAAAAAQgAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABBAAAAAAAAAEEAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					59,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAAEgAAAAAAAAASQAAAAAAAAAAAAAASQAAAAAAAABNAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABIAAAAAAAAAEgAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					60,
+					1,
+					"left_delete",
+					null,
+					"AQAAAEkAAAAAAAAASQAAAAAAAAAEAAAAICAgIA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABNAAAAAAAAAE0AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					62,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AQAAAF0AAAAAAAAAXgAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABdAAAAAAAAAF0AAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					67,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAAIIAAAAAAAAAgwAAAAAAAAAAAAAAgwAAAAAAAACLAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACCAAAAAAAAAIIAAAAAAAAAAAAAAAAAVUA"
+				],
+				[
+					68,
+					2,
+					"left_delete",
+					null,
+					"AgAAAIcAAAAAAAAAhwAAAAAAAAAEAAAAICAgIIMAAAAAAAAAgwAAAAAAAAAEAAAAICAgIA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACLAAAAAAAAAIsAAAAAAAAAAAAAAAAA8L8"
+				]
+			]
+		},
+		{
+			"contents": "/home/engon/Documents/efus/\n———————————————————————————\n▾ efus/\n   ▸ __pycache__/\n   ≡ __init__.py\n   ≡ component.py\n   ≡ namespace.py\n   ≡ parser.py\n   ≡ subscribe.py\n≡ efus.sublime-project\n≡ efus.sublime-workspace\n≡ main.py\n≡ test.efus",
+			"settings":
+			{
+				"buffer_size": 237,
+				"line_ending": "Unix",
+				"name": "𝌆 efus",
+				"read_only": true,
+				"scratch": true
+			},
+			"undo_stack":
+			[
+				[
+					2,
+					1,
+					"dired_refresh",
+					{
+						"goto": "efus/component.py",
+						"reset_sels": true
+					},
+					"AQAAAAAAAAAAAAAAhQAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					4,
+					1,
+					"dired_refresh",
+					{
+						"goto": "efus/component.py",
+						"reset_sels": false
+					},
+					"AQAAAAAAAAAAAAAAhQAAAAAAAADFAAAAL2hvbWUvZW5nb24vRG9jdW1lbnRzL2VmdXMvCuKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlArilrggZWZ1cy8K4omhIGVmdXMuc3VibGltZS1wcm9qZWN0CuKJoSBlZnVzLnN1YmxpbWUtd29ya3NwYWNlCuKJoSBtYWluLnB5CuKJoSB0ZXN0LmVmdXM",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA6AAAAAAAAADoAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					11,
+					1,
+					"dired_expand",
+					null,
+					"AQAAADgAAAAAAAAApwAAAAAAAAAJAAAA4pa4IGVmdXMv",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA6AAAAAAAAADoAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					21,
+					1,
+					"dired_fold",
+					null,
+					"AgAAADgAAAAAAAAAOQAAAAAAAAADAAAA4pa+QAAAAAAAAABAAAAAAAAAAHQAAAAgICDilrggX19weWNhY2hlX18vCiAgIOKJoSBfX2luaXRfXy5weQogICDiiaEgY29tcG9uZW50LnB5CiAgIOKJoSBuYW1lc3BhY2UucHkKICAg4omhIHBhcnNlci5weQogICDiiaEgc3Vic2NyaWJlLnB5Cg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADsAAAAAAAAAOwAAAAAAAAAAAAAAABAU0A"
+				],
+				[
+					1,
+					1,
+					"dired_refresh",
+					{
+						"reset_sels": true
+					},
+					"AQAAAAAAAAAAAAAAhQAAAAAAAADFAAAAL2hvbWUvZW5nb24vRG9jdW1lbnRzL2VmdXMvCuKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlArilrggZWZ1cy8K4omhIGVmdXMuc3VibGltZS1wcm9qZWN0CuKJoSBlZnVzLnN1YmxpbWUtd29ya3NwYWNlCuKJoSBtYWluLnB5CuKJoSB0ZXN0LmVmdXM",
+					"AQAAAAAAAAABAAAAfAAAAAAAAAB8AAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					3,
+					1,
+					"dired_refresh",
+					{
+						"goto": "efus/component.py",
+						"reset_sels": false
+					},
+					"AQAAAAAAAAAAAAAAhQAAAAAAAADFAAAAL2hvbWUvZW5nb24vRG9jdW1lbnRzL2VmdXMvCuKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlArilrggZWZ1cy8K4omhIGVmdXMuc3VibGltZS1wcm9qZWN0CuKJoSBlZnVzLnN1YmxpbWUtd29ya3NwYWNlCuKJoSBtYWluLnB5CuKJoSB0ZXN0LmVmdXM",
+					"AQAAAAAAAAABAAAAOgAAAAAAAAA6AAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					5,
+					1,
+					"dired_expand",
+					null,
+					"AQAAADgAAAAAAAAApwAAAAAAAAAJAAAA4pa4IGVmdXMv",
+					"AQAAAAAAAAABAAAAOgAAAAAAAAA6AAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"dired_refresh",
+					{
+						"goto": "efus/parser.py",
+						"reset_sels": false
+					},
+					"AQAAAAAAAAAAAAAA7QAAAAAAAAA5AQAAL2hvbWUvZW5nb24vRG9jdW1lbnRzL2VmdXMvCuKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlArilr4gZWZ1cy8KICAg4pa4IF9fcHljYWNoZV9fLwogICDiiaEgX19pbml0X18ucHkKICAg4omhIGNvbXBvbmVudC5weQogICDiiaEgbmFtZXNwYWNlLnB5CiAgIOKJoSBwYXJzZXIucHkKICAg4omhIHN1YnNjcmliZS5weQriiaEgZWZ1cy5zdWJsaW1lLXByb2plY3QK4omhIGVmdXMuc3VibGltZS13b3Jrc3BhY2UK4omhIG1haW4ucHkK4omhIHRlc3QuZWZ1cw",
+					"AQAAAAAAAAABAAAAiQAAAAAAAACJAAAAAAAAAAAAAAAAACxA"
+				],
+				[
+					17,
+					1,
+					"dired_refresh",
+					{
+						"goto": "efus/parser.py",
+						"reset_sels": false
+					},
+					"AQAAAAAAAAAAAAAA7QAAAAAAAAA5AQAAL2hvbWUvZW5nb24vRG9jdW1lbnRzL2VmdXMvCuKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlOKAlArilr4gZWZ1cy8KICAg4pa4IF9fcHljYWNoZV9fLwogICDiiaEgX19pbml0X18ucHkKICAg4omhIGNvbXBvbmVudC5weQogICDiiaEgbmFtZXNwYWNlLnB5CiAgIOKJoSBwYXJzZXIucHkKICAg4omhIHN1YnNjcmliZS5weQriiaEgZWZ1cy5zdWJsaW1lLXByb2plY3QK4omhIGVmdXMuc3VibGltZS13b3Jrc3BhY2UK4omhIG1haW4ucHkK4omhIHRlc3QuZWZ1cw",
+					"AQAAAAAAAAABAAAAjAAAAAAAAACMAAAAAAAAAAAAAAAAgEFA"
+				],
+				[
+					31,
+					2,
+					"dired_fold",
+					null,
+					"AgAAADgAAAAAAAAAOQAAAAAAAAADAAAA4pa+QAAAAAAAAABAAAAAAAAAAHQAAAAgICDilrggX19weWNhY2hlX18vCiAgIOKJoSBfX2luaXRfXy5weQogICDiiaEgY29tcG9uZW50LnB5CiAgIOKJoSBuYW1lc3BhY2UucHkKICAg4omhIHBhcnNlci5weQogICDiiaEgc3Vic2NyaWJlLnB5Cg",
+					"AQAAAAAAAAABAAAAoAAAAAAAAACgAAAAAAAAAAAAAAAAgFFA"
+				],
+				[
+					32,
+					1,
+					"dired_expand",
+					null,
+					"AQAAADgAAAAAAAAApwAAAAAAAAAJAAAA4pa4IGVmdXMv",
+					"AQAAAAAAAAABAAAAOgAAAAAAAAA6AAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"contents": " General Shortcuts:\n:            Command            :          Shortcut         :\n| Shortcuts page                | ?                         |\n| Refresh view                  | r                         |\n\n Navigation Shortcuts:\n:            Command            :          Shortcut         :\n| Move to previous              | k or up                   |\n| Move to next                  | j or down                 |\n| Expand directory              | l or right                |\n| Collapse directory            | h or left                 |\n| Toggle expand/collapse        | o                         |\n| Go to parent directory        | backspace                 |\n| Go to first                   | super+up or ctrl+home     |\n| Go to last                    | super+down or ctrl+end    |\n| Jump to                       | /                         |\n| Go to directory               | g                         |\n| Quick jump to directory       | p                         |\n| Find in files                 | s                         |\n| Toggle mark                   | m                         |\n| Toggle mark and move down     | shift+down                |\n| Toggle mark and move up       | shift+up                  |\n| Toggle all marks              | t                         |\n| Unmark all                    | u                         |\n| Mark by extension             | *                         |\n\n Action Shortcuts:\n:            Command            :          Shortcut         :\n| Copy                          | super+c or ctrl+c         |\n| Cut                           | super+x or ctrl+x         |\n| Paste                         | super+v or ctrl+v         |\n| Rename                        | R                         |\n| Delete to trash               | D                         |\n| Delete (permanently)          | alt+shift+d               |\n| Create directory              | cd, enter                 |\n| Create directory and open it  | cd, super+enter           |\n| Create file                   | cf, enter                 |\n| Create file and open it       | cf, super+enter           |\n| Create/Edit/Remove jump point | P                         |\n| Toggle hidden files           | H                         |\n| Open in Finder/Explorer       | \\                         |\n| Open in new window            | W                         |\n| Open file in another group    | enter                     |\n| Open all marked items         | super+enter or ctrl+enter |\n| Open file in preview          | shift+enter               |\n| (a.k.a transient) mode        |                           |\n| Toggle add folder to project  | f                         |\n| Set current folder as         | F                         |\n| only one for the project      |                           |\n| Quicklook for Mac or open in  | space                     |\n| default app on other OSs      |                           |\n\n In Rename Mode:\n:            Command            :          Shortcut         :\n| Apply changes                 | enter                     |\n| Discard changes               | escape                    |\n",
+			"settings":
+			{
+				"buffer_size": 3120,
+				"line_ending": "Unix",
+				"name": "Browse: shortcuts",
+				"read_only": true,
+				"scratch": true
+			},
+			"undo_stack":
+			[
+				[
+					2,
+					1,
+					"dired_show_help",
+					null,
+					"AQAAAAAAAAAAAAAAMAwAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "test.efus",
+			"settings":
+			{
+				"buffer_size": 54,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					11,
+					1,
+					"insert_snippet",
+					{
+						"contents": "\"$0\""
+					},
+					"AQAAACYAAAAAAAAAKAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAmAAAAAAAAACYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					13,
+					1,
+					"left_delete",
+					null,
+					"AQAAACcAAAAAAAAAJwAAAAAAAAABAAAAIg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAoAAAAAAAAACgAAAAAAAAAAAAAAAAA8L8"
+				]
+			]
+		}
+	],
+	"build_system": "run",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Anaconda Python Builder",
+					""
+				],
+				[
+					"run",
+					""
+				],
+				[
+					"run",
+					"Syntax Check"
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"run",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"destroy",
+				"Origami: Destroy Current Pane"
+			],
+			[
+				"filebro",
+				"Preferences: FileBrowser Key Bindings"
+			],
+			[
+				"filebr",
+				"Preferences: FileBrowser Settings"
+			],
+			[
+				"origa",
+				"Origami: Create Pane Below"
+			],
+			[
+				"bro",
+				"Browse Mode: Right Sidebar"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"ui",
+				"UI: Select Theme"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/engon/Documents/efus",
+		"/home/engon/Documents/efus/efus"
+	],
+	"file_history":
+	[
+		"/home/engon/Documents/efus/efus/subscribe.py",
+		"/home/engon/Documents/efus/efus/parser.py",
+		"/home/engon/.config/sublime-text/Packages/Anaconda/Anaconda.sublime-settings",
+		"/home/engon/.config/sublime-text/Packages/User/Anaconda.sublime-settings",
+		"/home/engon/Documents/efus/efus.sublime-project"
+	],
+	"find":
+	{
+		"height": 32.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"false"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.py",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 83,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83,
+								83
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html, text.xml"
+								},
+								{
+									"rhs_empty": true,
+									"selector": "punctuation.accessor"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric, meta.interpolated.format.fstring"
+								}
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "efus/component.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 131,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								129,
+								129
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"sheets":
+			[
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 237,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								61,
+								61
+							]
+						],
+						"settings":
+						{
+							"dired_count": 11,
+							"dired_index":
+							[
+								"",
+								"",
+								"/home/engon/Documents/efus/efus/",
+								"/home/engon/Documents/efus/efus/__pycache__/",
+								"/home/engon/Documents/efus/efus/__init__.py",
+								"/home/engon/Documents/efus/efus/component.py",
+								"/home/engon/Documents/efus/efus/namespace.py",
+								"/home/engon/Documents/efus/efus/parser.py",
+								"/home/engon/Documents/efus/efus/subscribe.py",
+								"/home/engon/Documents/efus/efus.sublime-project",
+								"/home/engon/Documents/efus/efus.sublime-workspace",
+								"/home/engon/Documents/efus/main.py",
+								"/home/engon/Documents/efus/test.efus"
+							],
+							"dired_path": "/home/engon/Documents/efus/",
+							"dired_rename_mode": false,
+							"dired_stop_preview_thread": true,
+							"syntax": "Packages/FileBrowser/dired.sublime-syntax",
+							"vcs_changed_items":
+							{
+							}
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3120,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3120,
+								3120
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/FileBrowser/dired.hidden-tmTheme",
+							"drag_text": false,
+							"draw_indent_guides": false,
+							"fold_buttons": false,
+							"gutter": false,
+							"line_numbers": false,
+							"margin": 16,
+							"rulers":
+							[
+							],
+							"spell_check": false,
+							"syntax": "Packages/FileBrowser/dired-help.sublime-syntax",
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 577.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"sheets":
+			[
+				{
+					"buffer": 4,
+					"file": "test.efus",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 54,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								39,
+								39
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 32.0
+	},
+	"input":
+	{
+		"height": 58.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				2
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			],
+			[
+				1,
+				1,
+				2,
+				2
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.563533170524,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			0.5,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 128.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "efus.sublime-project",
+	"replace":
+	{
+		"height": 60.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 201.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
