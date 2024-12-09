@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: efus
+Version: 0.1.0
+Summary: Efus component language.
+Author-email: Engon Ken Morel <engonken8@gmail.com>
+Maintainer-email: Engon Ken Morel <engonken8@gmail.com>
+Project-URL: Homepage, https://github.com/ken-morel/efus
+Project-URL: Documentation, https://python-efus.readthedocs.org
+Project-URL: Repository, https://github.com/ken-morel/efus.git
+Project-URL: Issues, https://github.com/ken-morel/efus/issues
+Keywords: components,efus
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Description-Content-Type: text/markdown
