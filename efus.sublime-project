@@ -2,6 +2,9 @@
 	"folders":
 	[
 		{
+			"path": "/home/engon/Documents/efus",
+		},
+		{
 			"path": ".",
 		},
 	],
@@ -32,7 +35,13 @@
 			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
 			"name": "Anaconda Python Builder",
 			"selector": "source.python",
-			"shell_cmd": "\"python3\" -u \"$file\"",
+			"shell_cmd": "\"/home/engon/Documents/efus/bin/python\" -u \"$file\"",
 		},
 	],
+	"settings": {
+	    "python_interpreter": "/home/engon/Documents/efus/bin/python",
+	    "test_command": "pytest",
+	    "test_virtualenv": "/home/engon/Documents/efus",
+	    "test_project_path": "/home/engon/Documents/efus",
+	},
 }

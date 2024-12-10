@@ -1,0 +1,9 @@
+!- src/efus/parser/types.py:6
+----- Write Documentation
+     -- write readme
+          - examples
+          - description
+     -- `readthedocs` documentation
+          - faq
+- add support for types
+     - ...
