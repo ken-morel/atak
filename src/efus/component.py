@@ -18,7 +18,7 @@ class CompParams:
     def __init__(self, params: ParamDef):
         self.params = params
 
-    def bind(self, args: tuple, kw: dict[str, types.EObject]):
+    def bind(self, args: tuple, kw: "dict[str, types.EObject]"):
         return CompArgs(self, args, kw)
 
 
@@ -26,13 +26,13 @@ class CompArgs(dict):
     params: ParamDef
 
     def __init__(
-        self, params: CompParams, values: list[tuple[str, types.EObject]]
+        self, params: CompParams, values: "list[tuple[str, types.EObject]]"
     ):
         self.params = params
         self.values = values
         super().__init__()
 
-    def eval(self, namespace: namespace.Namespace) -> typing.Self:
+    def eval(self, namespace: namespace.Namespace) -> "CompArgs":
         self.clear()
         vals = {}
         for name, val in self.values:
@@ -47,9 +47,9 @@ class CompArgs(dict):
         return self
 
 
-class EComponent(subscribe.Subscriber):
+class Component(subscribe.Subscriber):
     namespace: namespace.Namespace
-    subscriber: namespace.Subscriber
+    subscriber: subscribe.Subscriber
 
     def __init__(self):
         self.subscriber = subscribe.Subscriber()

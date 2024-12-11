@@ -1,6 +1,6 @@
 """Efus parser class and functions."""
 import re
-from .. import types
+from . import types
 from decimal import Decimal
 from typing import Optional
 
@@ -8,7 +8,7 @@ from typing import Optional
 class Parser:
     idx: int
     text: str
-    instructions: 2
+    tree: list[types.EInstr]
     file: Optional[str]
     SPACE = frozenset(" \t")
     tag_def = re.compile(r"(?P<name>[\w]+)(?:\&(?P<alias>[\w]+))?")
@@ -18,22 +18,23 @@ class Parser:
     scalar = re.compile(r"([+\-]?\d+)(\.\d+)?(\w[\w\d]*)")
     # string = re.compile(r"((\"|')[.+()]\1)")
 
-    class End(Exception):
+    class _End(Exception):
         pass
 
-    class EOF(End):
+    class _EOF(_End):
         pass
 
-    class EOL(End):
+    class _EOL(_End):
         pass
 
     class SyntaxError(SyntaxError):
-        pass
+        """Efus code syntax error."""
 
     def __init__(self, file: str = None):
+        """Create an efus code parser with optional given file."""
         self.idx = 0
         self.text = ""
-        self.instructions = []
+        self.tree = []
         self.parsed = []
         self.file = file
 
@@ -47,7 +48,7 @@ class Parser:
         while True:  # For each logical line
             try:
                 indent = self.next_indent()
-            except Parser.EOF:  # Getcha that next line!
+            except Parser._EOF:  # Getcha that next line!
                 break
             tag = Parser.tag_def.search(self.text, self.idx)
             if tag and tag.span()[0] == self.idx:
@@ -68,7 +69,7 @@ class Parser:
         try:
             while True:
                 attrs += self.parse_next_attr_value()
-        except Parser.EOL:
+        except Parser._EOL:
             pass
         return attrs
 
@@ -116,7 +117,7 @@ class Parser:
                 else:
                     self.idx += 1
             else:
-                raise Parser.SyntaxError("Untermated string at EOF")
+                raise Parser.SyntaxError("Untermated string at _EOF")
             return types.EStr(eval(self.text[begin : self.idx]))
         else:
             raise Parser.SyntaxError("Unknown literal\n" + self.py_stack())
@@ -126,11 +127,11 @@ class Parser:
             if self.text[self.idx] in Parser.SPACE:
                 self.idx += 1
             elif self.text[self.idx] == "\n":
-                raise Parser.EOL()
+                raise Parser._EOL()
             else:
                 break
         else:
-            raise Parser.EOL()
+            raise Parser._EOL()
 
     def next_indent(self) -> int:
         begin = self.idx
@@ -144,7 +145,7 @@ class Parser:
                 break
         else:
             self.idx = begin
-            raise Parser.EOF()
+            raise Parser._EOF()
         return self.idx - begin
 
     def __repr__(self):

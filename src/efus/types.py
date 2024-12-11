@@ -15,7 +15,7 @@ class EObject(ABC, subscribe.Subscribeable):
         """Initialize default for EObject Subsclasses."""
         self.value = value
 
-    def eval(self):
+    def eval(self, namespace: namespace.Namespace):
         """Evaluate to a python object."""
         raise NotImplementedError(
             f"Cannot convert object of type {self.__class__.__name__} "
@@ -43,18 +43,12 @@ class ENilType(EObject):
     def __hash__(self):
         return 1
 
+    @classmethod
+    def eval(cls, namespace: namespace.Namespace) -> "ENilType":
+        return cls()
+
 
 ENil = ENilType()
-
-
-def _py_eval(self) -> Any:
-    """Return underlying value."""
-    return self.value
-
-
-def _py_evals(cls):
-    cls.eval = _py_eval
-    return cls
 
 
 class ENumber(EObject):
@@ -93,7 +87,9 @@ class EInstr(EObject):
             self.add_child_component(child_component)
 
     def _eval(
-        self, parent: component.Component, namespace: namespace.Namespace
+        self,
+        namespace: namespace.Namespace,
+        parent: Optional[component.Component] = None,
     ):
         pass
 
@@ -120,19 +116,23 @@ class Efus(EObject):
         return str(self.parent_instruction)
 
     def translate(self, namespace: namespace.Namespace):
+        """EValuate the code in the given namespace."""
         return self.parent_instruction.eval(namespace)
 
+    eval = translate
 
-class Scalar(EObject):
+
+class EScalar(EObject):
     """Efus variable scalar multiple."""
 
     coefficient: int | Decimal
     multiple: str
 
     def __init__(self, coefficient: int | Decimal, multiple: str):
-        super(Scalar, self).__init__()
+        super().__init__()
         self.coefficient = coefficient
         self.multiple = multiple
 
     def eval(self, namespace: namespace.Namespace):
+        """Return the scalar product of multiple and coefficient."""
         return self.coefficient * namespace.name(self.multiple)

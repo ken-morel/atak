@@ -11,7 +11,7 @@ Documentation
 Types
 -	add support for types
 	-- String
-	--	Number
+	+--	Number
 		+--	Decimal
 		+--	Int
 	--	Scalar
