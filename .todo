@@ -1,9 +1,20 @@
-!- src/efus/parser/types.py:6
------ Write Documentation
-     -- write readme
-          - examples
-          - description
-     -- `readthedocs` documentation
-          - faq
-- add support for types
-     - ...
+.--- (Module not ready)
+	include pyoload3 typing
+
+Documentation
+----	write readme
+	-	examples
+	-	description
+--	`readthedocs` documentation
+	-	faq
+
+Types
+-	add support for types
+	-- String
+	--	Number
+		+--	Decimal
+		+--	Int
+	--	Scalar
+	--	Vector
+	- Translations
+	- Expressions

@@ -1,6 +1,6 @@
 """Efus parser class and functions."""
 import re
-from . import types
+from .. import types
 from decimal import Decimal
 from typing import Optional
 
@@ -15,6 +15,7 @@ class Parser:
     tag_name = re.compile(r"(?P<name>\w[\w\d\:]*)\=")
     decimal = re.compile(r"([+\-]?\d+(?:\.\d+)?)")
     integer = re.compile(r"([+\-]?\d+)")
+    scalar = re.compile(r"([+\-]?\d+)(\.\d+)?(\w[\w\d]*)")
     # string = re.compile(r"((\"|')[.+()]\1)")
 
     class End(Exception):
@@ -49,7 +50,6 @@ class Parser:
             except Parser.EOF:  # Getcha that next line!
                 break
             tag = Parser.tag_def.search(self.text, self.idx)
-            print(tag, self.idx)
             if tag and tag.span()[0] == self.idx:
                 self.idx += tag.span()[1] - tag.span()[0]
                 groups = tag.groupdict()
@@ -83,7 +83,16 @@ class Parser:
             return []
 
     def parse_next_value(self):
-        if (m := Parser.decimal.search(self.text, self.idx)) and m.span()[
+        if (m := Parser.scalar.search(self.text, self.idx)) and m.span()[
+            0
+        ] == self.idx:
+            self.idx += m.span()[1] - m.span()[0]
+            whole, decimal, multiple = m.groups()
+            if decimal is None:
+                return types.Scalar(Decimal(whole + decimal), multiple)
+            else:
+                return types.Scalar(int(whole), multiple)
+        elif (m := Parser.decimal.search(self.text, self.idx)) and m.span()[
             0
         ] == self.idx:
             self.idx += m.span()[1] - m.span()[0]
@@ -132,7 +141,6 @@ class Parser:
                 self.idx += 1
                 begin = self.idx
             else:
-                print("next indent closes at", self)
                 break
         else:
             self.idx = begin
