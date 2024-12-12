@@ -1,21 +1,27 @@
 """Efus parser class and functions."""
 import re
+
 from . import types
 from decimal import Decimal
+from pyoload import *
 from typing import Optional
 
 
+@annotate
 class Parser:
+    """Efus code parser class."""
+
     idx: int
     text: str
-    tree: list[types.EInstr]
+    tree: list[tuple[int, types.EInstr]]
     file: Optional[str]
     SPACE = frozenset(" \t")
-    tag_def = re.compile(r"(?P<name>[\w]+)(?:\&(?P<alias>[\w]+))?")
+    tag_def = re.compile(r"(?P<name>[\w]+)(?:\&(?P<alias>[\w]+))?(?=$|\s|\n)")
     tag_name = re.compile(r"(?P<name>\w[\w\d\:]*)\=")
-    decimal = re.compile(r"([+\-]?\d+(?:\.\d+)?)")
-    integer = re.compile(r"([+\-]?\d+)")
-    scalar = re.compile(r"([+\-]?\d+)(\.\d+)?(\w[\w\d]*)")
+    decimal = re.compile(r"([+\-]?\d+(?:\.\d+)?)(?=$|\s|\n)")
+    integer = re.compile(r"([+\-]?\d+)(?=$|\s|\n)")
+    size = re.compile(r"(\d+)x(\d+)(?=$|\s|\n)")
+    scalar = re.compile(r"([+\-]?\d+)(\.\d+)?(\w[\w\d]*)(?=$|\s|\n)")
     # string = re.compile(r"((\"|')[.+()]\1)")
 
     class _End(Exception):
@@ -30,6 +36,7 @@ class Parser:
     class SyntaxError(SyntaxError):
         """Efus code syntax error."""
 
+    @annotate
     def __init__(self, file: str = None):
         """Create an efus code parser with optional given file."""
         self.idx = 0
@@ -42,9 +49,10 @@ class Parser:
         """Feed code in parser."""
         self.text += text
         self.go_ahead()
-        return self.instructions
+        return self.tree[0][1]
 
     def go_ahead(self):
+        """Read and interpret the next instructions."""
         while True:  # For each logical line
             try:
                 indent = self.next_indent()
@@ -54,17 +62,31 @@ class Parser:
             if tag and tag.span()[0] == self.idx:
                 self.idx += tag.span()[1] - tag.span()[0]
                 groups = tag.groupdict()
-                attrs = self.parse_attrs()
-                self.instructions.append(
-                    (
-                        indent,
-                        types.TagDef(groups["name"], groups["alias"], attrs),
-                    )
-                )
+                attrs = dict(self.parse_attrs())
+                tag = types.TagDef(groups["name"], groups["alias"], attrs)
+                if len(self.tree) == 0:
+                    self.tree = [(indent, tag)]
+                else:
+                    if indent > self.tree[-1][0]:  # it is a child of -1
+                        self.tree[-1][1].add_child_instruction(tag)
+                        self.tree.append((indent, tag))
+                    elif indent == self.tree[-1][0]:  # -1 and tag are both
+                        self.tree[-2][1].add_child_instruction(tag)
+                        self.tree[-1] = (indent, tag)
+                    else:  # tag is higher in hieharchy but after -1
+                        while indent <= self.tree[-1][0]:
+                            self.tree.pop()  # remove all to parent
+                            if len(self.tree) == 0:
+                                raise Parser.SyntaxError(
+                                    f"Fatal: Code has two heads\n{self}"
+                                )
+                        self.tree[-1][1].add_child_instruction(tag)
+                        self.tree.append((indent, self))
             else:
                 raise Exception()
 
     def parse_attrs(self) -> list[tuple]:
+        """Parse next following attrs."""
         attrs = []
         try:
             while True:
@@ -84,15 +106,11 @@ class Parser:
             return []
 
     def parse_next_value(self):
-        if (m := Parser.scalar.search(self.text, self.idx)) and m.span()[
+        if (m := Parser.size.search(self.text, self.idx)) and m.span()[
             0
         ] == self.idx:
             self.idx += m.span()[1] - m.span()[0]
-            whole, decimal, multiple = m.groups()
-            if decimal is None:
-                return types.Scalar(Decimal(whole + decimal), multiple)
-            else:
-                return types.Scalar(int(whole), multiple)
+            return types.ESize(int(m.groups()[0]), int(m.groups()[1]))
         elif (m := Parser.decimal.search(self.text, self.idx)) and m.span()[
             0
         ] == self.idx:
@@ -103,6 +121,15 @@ class Parser:
         ] == self.idx:
             self.idx += m.span()[1] - m.span()[0]
             return types.ENumber(int(m.groups()[0]))
+        elif (m := Parser.scalar.search(self.text, self.idx)) and m.span()[
+            0
+        ] == self.idx:
+            self.idx += m.span()[1] - m.span()[0]
+            whole, decimal, multiple = m.groups()
+            if decimal is not None:
+                return types.EScalar(Decimal(whole + decimal), multiple)
+            else:
+                return types.EScalar(int(whole), multiple)
         elif (b := self.text[self.idx]) in "'\"":
             begin = self.idx
             self.idx += 1
@@ -189,6 +216,7 @@ class Parser:
         )
 
 
+@annotate
 def parse_file(path: str) -> types.Efus:
     with open(path) as f:
         return types.Efus(Parser(path).feed(f.read()))

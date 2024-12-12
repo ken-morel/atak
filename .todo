@@ -1,20 +1,22 @@
-.--- (Module not ready)
-	include pyoload3 typing
++-3 include pyoload3 typing
 
 Documentation
-----	write readme
-	-	examples
-	-	description
---	`readthedocs` documentation
-	-	faq
+-4	write readme
+	-1	examples
+	-1	description
+-2	`readthedocs` documentation
+	-1	faq
 
 Types
--	add support for types
-	-- String
-	+--	Number
-		+--	Decimal
-		+--	Int
-	--	Scalar
-	--	Vector
-	- Translations
-	- Expressions
+-1	add support for types
+	-2 String
+	+-2	Number
+		+-2	Decimal
+		+-2	Int
+	-2	Scalar
+	-2	Vector
+	-1	Translations
+	-1	Expressions
+Component
+-5	Params
+-5	args

@@ -1,9 +1,12 @@
 """Holds the namespace class, responsible for efus component namespaces."""
 
 
+import functools
+import typing
+
+from . import constants
 from . import subscribe
 from . import types
-import typing
 
 # from .parser import types
 
@@ -14,11 +17,18 @@ class Namespace(dict, subscribe.Subscribeable):
     dirty: bool
     parents: "tuple[Namespace]"
 
+    @classmethod
+    @functools.cache
+    def defaults(cls):
+        """Get default and basic namespace variables provided by efus."""
+        return {k: v for k, v in vars(constants).items() if not k[0] == "_"}
+
     def __init__(self, parents: "tuple[Namespace]" = (), default: dict = {}):
         """Initialize with default value."""
         self.dirty = False
         self.parents = parents
-        dict.__init__(self, default)
+        dict.__init__(self, Namespace.defaults())
+        dict.update(self, default)
         subscribe.Subscribeable.__init__(self)
 
     def __setitem__(self, item: str, value: typing.Any):
@@ -37,9 +47,9 @@ class Namespace(dict, subscribe.Subscribeable):
             return True
         return False
 
-    def name(self, name: str) -> typing.Any:
+    def get_name(self, name: str) -> typing.Any:
         """
-        Return name or raise error
+        Return name or raise error.
 
         :raises NameError: If name not found
         """
@@ -51,6 +61,7 @@ class Namespace(dict, subscribe.Subscribeable):
     def get(
         self, name: str, head: "typing.Optional[Namespace]" = None
     ) -> typing.Any:
+        """Search for `name` in self and parent namespaces."""
         if name in self:
             return self[name]
         else:

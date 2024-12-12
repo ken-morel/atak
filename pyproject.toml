@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "efus"
 version = "0.1.0"
 dependencies = [
+    "pyoload>=3.0.0"
 ]
 authors = [
     {name = "Engon Ken Morel", email = "engonken8@gmail.com"}
