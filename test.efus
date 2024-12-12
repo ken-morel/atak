@@ -1,1 +1,2 @@
-tk&root title="Hello world" size=500x200
+tk&root title="Hello world" size=500x200 pos:pack=9
+    label r=45

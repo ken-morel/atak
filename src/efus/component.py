@@ -1,4 +1,11 @@
-"""Base component class."""
+"""
+Base component class and argument manager definitions.
+
+Classes defined here are:
+- `CompParams`.
+- `CompArgs`
+- `Component`
+"""
 
 import typing
 
@@ -10,7 +17,7 @@ from pyoload import *
 ParamDef = dict[
     str,  # name
     tuple[
-        typing.Type,  # type
+        typing.Any,  # type
         typing.Any,  # default
     ],
 ]
@@ -18,7 +25,13 @@ ParamDef = dict[
 
 @annotate
 class CompParams:
-    """Component parameters handler."""
+    """
+    Component parameters holder.
+
+    This class contains the parameters of a component in the form of a
+    dictionary mapping of type, default tuples. Like:
+    :py:`{"name": (str, "John Doe")}`
+    """
 
     params: ParamDef
 

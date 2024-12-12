@@ -86,7 +86,7 @@ class Parser:
                 raise Exception()
 
     def parse_attrs(self) -> list[tuple]:
-        """Parse next following attrs."""
+        """Parse next following attrs. :py:`int(3) + 4`"""
         attrs = []
         try:
             while True:

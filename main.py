@@ -2,6 +2,7 @@
 """Main page."""
 import pyoload
 
+from typing import Any
 from typing import Optional
 
 pyoload.debug()
@@ -38,8 +39,38 @@ def main():
         ) -> Component:
             return cls(np, cls.params.bind(attrs, np), pc)
 
+        def child_geometry(self, child, widget, args):
+            widget.pack()
+
+    class TkLabel(Component):
+        namespace: Namespace
+        params = CompParams(
+            {"text": (str, "no text"), "pos": (dict[str, Any], {})}
+        )
+
+        def prerender(self):
+            from tkinter import Label
+
+            attrs = ("text",)
+            self.inlet = self.widget = Label(
+                **{x: y for x, y in self.args.items() if x in attrs}
+            )
+            self.parent.child_geometry(self, self.inlet, self.args["pos"])
+            return self.widget
+
+        @classmethod
+        @pyoload.annotate
+        def create(
+            cls,
+            np: Namespace,
+            attrs: dict[str, EObject],
+            pc: Optional[Component],
+        ) -> Component:
+            return cls(np, cls.params.bind(attrs, np), pc)
+
     np = Namespace()
     np["tk"] = TkComp
+    np["label"] = TkLabel
     code = parse_file("test.efus")
     print(code)
 
