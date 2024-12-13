@@ -22,7 +22,9 @@ class Parser:
     integer = re.compile(r"([+\-]?\d+)(?=$|\s|\n)")
     size = re.compile(r"(\d+)x(\d+)(?=$|\s|\n)")
     scalar = re.compile(r"([+\-]?\d+)(\.\d+)?(\w[\w\d]*)(?=$|\s|\n)")
-    # string = re.compile(r"((\"|')[.+()]\1)")
+    const_var = re.compile(r"([a-zA-Z][a-zA-Z1-9]*)(?=$|\s|\n)")
+    using = re.compile(r"using ([\w\d.]+)(?::([^\n]+))?")
+    # string = re.compile(r"((\p"|')[.+()]\1)")
 
     class _End(Exception):
         pass
@@ -58,32 +60,44 @@ class Parser:
                 indent = self.next_indent()
             except Parser._EOF:  # Getcha that next line!
                 break
-            tag = Parser.tag_def.search(self.text, self.idx)
-            if tag and tag.span()[0] == self.idx:
+            if (
+                using := Parser.using.search(self.text, self.idx)
+            ) is not None and using.span()[0] == self.idx:
+                self.idx += tag.span()[1] - tag.span()[0]
+                module = using.groups()[0]
+                names = using.groups()[1]
+                names = tuple(map(str.strip, names.split(",")))
+                self._queue_instr(indent, 3)
+            if (
+                tag := Parser.tag_def.search(self.text, self.idx)
+            ) is not None and tag.span()[0] == self.idx:
                 self.idx += tag.span()[1] - tag.span()[0]
                 groups = tag.groupdict()
                 attrs = dict(self.parse_attrs())
                 tag = types.TagDef(groups["name"], groups["alias"], attrs)
-                if len(self.tree) == 0:
-                    self.tree = [(indent, tag)]
-                else:
-                    if indent > self.tree[-1][0]:  # it is a child of -1
-                        self.tree[-1][1].add_child_instruction(tag)
-                        self.tree.append((indent, tag))
-                    elif indent == self.tree[-1][0]:  # -1 and tag are both
-                        self.tree[-2][1].add_child_instruction(tag)
-                        self.tree[-1] = (indent, tag)
-                    else:  # tag is higher in hieharchy but after -1
-                        while indent <= self.tree[-1][0]:
-                            self.tree.pop()  # remove all to parent
-                            if len(self.tree) == 0:
-                                raise Parser.SyntaxError(
-                                    f"Fatal: Code has two heads\n{self}"
-                                )
-                        self.tree[-1][1].add_child_instruction(tag)
-                        self.tree.append((indent, self))
+                self._queue_instr(indent, tag)
             else:
                 raise Exception()
+
+    def _queue_instr(self, indent, instr):
+        if len(self.tree) == 0:
+            self.tree = [(indent, instr)]
+        else:
+            if indent > self.tree[-1][0]:  # it is a child of -1
+                self.tree[-1][1].add_child_instruction(instr)
+                self.tree.append((indent, instr))
+            elif indent == self.tree[-1][0]:  # -1 and instr are both
+                self.tree[-2][1].add_child_instruction(instr)
+                self.tree[-1] = (indent, instr)
+            else:  # instr is higher in hieharchy but after -1
+                while indent <= self.tree[-1][0]:
+                    self.tree.pop()  # remove all to parent
+                    if len(self.tree) == 0:
+                        raise Parser.SyntaxError(
+                            f"Fatal: Code has two heads\n{self}"
+                        )
+                self.tree[-1][1].add_child_instruction(instr)
+                self.tree.append((indent, self))
 
     def parse_attrs(self) -> list[tuple]:
         """Parse next following attrs. :py:`int(3) + 4`"""
@@ -106,7 +120,12 @@ class Parser:
             return []
 
     def parse_next_value(self):
-        if (m := Parser.size.search(self.text, self.idx)) and m.span()[
+        if (m := Parser.const_var.search(self.text, self.idx)) and m.span()[
+            0
+        ] == self.idx:
+            self.idx += m.span()[1] - m.span()[0]
+            return types.EVar(m.groups()[0])
+        elif (m := Parser.size.search(self.text, self.idx)) and m.span()[
             0
         ] == self.idx:
             self.idx += m.span()[1] - m.span()[0]

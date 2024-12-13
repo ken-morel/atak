@@ -1,22 +1,22 @@
 """Efus base and complex types."""
 import dataclasses
 
+import typing
+
 from . import component
 from . import namespace
 from . import subscribe
 from abc import ABC
 from decimal import Decimal
 from pyoload import *
-from typing import Any
-from typing import Optional
 
 
 class EObject(ABC, subscribe.Subscribeable):
     """Efus base object value class."""
 
-    value: Any
+    value: typing.Any
 
-    def __init__(self, value: Any = None):
+    def __init__(self, value: typing.Any = None):
         """Initialize default for EObject Subsclasses."""
         self.value = value
 
@@ -62,6 +62,39 @@ class ENilType(EObject):
 ENil = ENilType()
 
 
+class EAllType(EObject):
+    """Efus ENil type."""
+
+    val = None
+
+    def __new__(cls):
+        """Return or create the singleton ENil."""
+        if cls.val is None:
+            cls.val = super().__new__(cls)
+        return cls.val
+
+    def __init__(self):
+        """Create a NilType object."""
+
+    def __bool__(self) -> bool:
+        return False
+
+    def __hash__(self):
+        return 1
+
+    @classmethod
+    @annotate
+    def eval(cls, namespace: "namespace.Namespace") -> "ENilType":
+        """Convert ENil to python ENil(aka return ENil)."""
+        return cls()
+
+    def __repr__(self):
+        return "EAll"
+
+
+EAll = EAllType()
+
+
 class ENumber(EObject):
     """Efus Number object."""
 
@@ -98,7 +131,7 @@ class EInstr(EObject):
     def eval(
         self,
         namespace: "namespace.Namespace",
-        parent_component: Optional[component.Component] = None,
+        parent_component: typing.Optional[component.Component] = None,
     ) -> component.Component:
         """Run the instruction and children in given namespace."""
         self_component = self._eval(namespace, parent_component)
@@ -111,7 +144,7 @@ class EInstr(EObject):
     def _eval(
         self,
         namespace: "namespace.Namespace",
-        parent: Optional[component.Component] = None,
+        parent: typing.Optional[component.Component] = None,
     ) -> component.Component:
         raise NotImplementedError("Override this function please.")
 
@@ -122,7 +155,7 @@ class TagDef(EInstr):
     """Tag definition code."""
 
     name: str
-    alias: Optional[str]
+    alias: typing.Optional[str]
     attributes: dict
     children: list[EInstr] = dataclasses.field(default_factory=list)
 
@@ -130,7 +163,37 @@ class TagDef(EInstr):
     def _eval(
         self,
         namespace: "namespace.Namespace",
-        parent_component: Optional[component.Component] = None,
+        parent_component: typing.Optional[component.Component] = None,
+    ) -> component.Component:
+        try:
+            comp_class = namespace.get_name(self.name)
+        except NameError as e:
+            raise NameError(
+                f"Component {self.name!r} could not be"
+                + f" found in namespace. (#{e})"
+            ) from e
+        else:
+            comp = comp_class.create(
+                namespace, self.attributes, parent_component
+            )
+            namespace[self.alias] = comp
+            return comp
+
+
+@dataclasses.dataclass
+@annotate
+class UsingDef(EInstr):
+    """Tag definition code."""
+
+    name: str
+    aliasses: tuple[str] | ALL
+    children: list[EInstr] = dataclasses.field(default_factory=list)
+
+    @annotate
+    def _eval(
+        self,
+        namespace: "namespace.Namespace",
+        parent_component: typing.Optional[component.Component] = None,
     ) -> component.Component:
         try:
             comp_class = namespace.get_name(self.name)
@@ -304,3 +367,18 @@ class ESize(EObject):
 
     def eval(self, namespace: "namespace.Namespace") -> "ESize":
         return self
+
+
+class EVar(EObject):
+    """Efus variable alias."""
+
+    name: str
+
+    def __init__(self, name: str):
+        """Create a named variable alias."""
+        super().__init__()
+        self.name = name
+
+    def eval(self, namespace: "namespace.Namespace") -> typing.Any:
+        """Get the given variavle in the namespace."""
+        return namespace.get(self.name)

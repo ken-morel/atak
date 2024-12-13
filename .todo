@@ -20,3 +20,6 @@ Types
 Component
 -5	Params
 -5	args
+
+Exceptions
+-1	Add better checking for imports syntax

@@ -4,17 +4,14 @@
 		{
 			"path": "/home/engon/Documents/efus",
 		},
-		{
-			"path": ".",
-		},
 	],
 	"build_systems": [
 		{
 			"name": "run",
-				"cmd": ["python3", "$project_path/main.py"],
+				"cmd": ["python3", "/home/engon/Documents/testings/main.py"],
 			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
 			"selector": "source.python",
-			"working_dir": "$project_path",
+			"working_dir": "/home/engon/Documents/testings",
 
 			"env": {"PYTHONIOENCODING": "utf-8",},
 
