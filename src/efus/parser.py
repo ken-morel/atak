@@ -2,7 +2,6 @@
 import re
 
 from . import types
-from decimal import Decimal
 from pyoload import *
 from typing import Optional
 
@@ -23,7 +22,10 @@ class Parser:
     size = re.compile(r"(\d+)x(\d+)(?=$|\s|\n)")
     scalar = re.compile(r"([+\-]?\d+)(\.\d+)?(\w[\w\d]*)(?=$|\s|\n)")
     const_var = re.compile(r"([a-zA-Z][a-zA-Z1-9]*)(?=$|\s|\n)")
-    using = re.compile(r"using ([\w\d.]+)(?::([^\n]+))?")
+    using = re.compile(
+        r"using\s+([\w\d\.]+)(?:(?:\:\s*(\*))|(?:\:\s*([\w\d ]+)))?"
+        + r"(?=\s*$|\s*\n)"
+    )
     # string = re.compile(r"((\p"|')[.+()]\1)")
 
     class _End(Exception):
@@ -43,7 +45,7 @@ class Parser:
         """Create an efus code parser with optional given file."""
         self.idx = 0
         self.text = ""
-        self.tree = []
+        self.tree = [(-1, types.RootDef())]
         self.parsed = []
         self.file = file
 
@@ -60,17 +62,28 @@ class Parser:
                 indent = self.next_indent()
             except Parser._EOF:  # Getcha that next line!
                 break
+            print("INDENT", indent, flush=True)
             if (
                 using := Parser.using.search(self.text, self.idx)
             ) is not None and using.span()[0] == self.idx:
-                self.idx += tag.span()[1] - tag.span()[0]
+                print("  USING", using, using.groups(), flush=True)
+                self.idx += using.span()[1] - using.span()[0]
                 module = using.groups()[0]
-                names = using.groups()[1]
-                names = tuple(map(str.strip, names.split(",")))
-                self._queue_instr(indent, 3)
-            if (
+                names = using.groups()[2]
+                is_all = using.groups()[1] is not None
+                if names is not None:
+                    names = tuple(map(str.strip, names.split(",")))
+                    if is_all:
+                        raise Parser.SyntaxError(
+                            "Can not import names and * at same time."
+                        )
+                self._queue_instr(
+                    indent, types.UsingDef(module, names, is_all)
+                )
+            elif (
                 tag := Parser.tag_def.search(self.text, self.idx)
             ) is not None and tag.span()[0] == self.idx:
+                print("  TAG", tag, flush=True)
                 self.idx += tag.span()[1] - tag.span()[0]
                 groups = tag.groupdict()
                 attrs = dict(self.parse_attrs())
@@ -87,7 +100,8 @@ class Parser:
                 self.tree[-1][1].add_child_instruction(instr)
                 self.tree.append((indent, instr))
             elif indent == self.tree[-1][0]:  # -1 and instr are both
-                self.tree[-2][1].add_child_instruction(instr)
+                if len(self.tree) >= 2:
+                    self.tree[-2][1].add_child_instruction(instr)
                 self.tree[-1] = (indent, instr)
             else:  # instr is higher in hieharchy but after -1
                 while indent <= self.tree[-1][0]:
@@ -134,7 +148,7 @@ class Parser:
             0
         ] == self.idx:
             self.idx += m.span()[1] - m.span()[0]
-            return types.ENumber(Decimal(m.groups()[0]))
+            return types.ENumber(float(m.groups()[0]))
         elif (m := Parser.integer.search(self.text, self.idx)) and m.span()[
             0
         ] == self.idx:
@@ -146,7 +160,7 @@ class Parser:
             self.idx += m.span()[1] - m.span()[0]
             whole, decimal, multiple = m.groups()
             if decimal is not None:
-                return types.EScalar(Decimal(whole + decimal), multiple)
+                return types.EScalar(float(whole + decimal), multiple)
             else:
                 return types.EScalar(int(whole), multiple)
         elif (b := self.text[self.idx]) in "'\"":

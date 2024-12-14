@@ -2,11 +2,13 @@
 
 
 import functools
+import importlib
 import typing
 
 from . import constants
 from . import subscribe
 from . import types
+from pyoload import *
 
 # from .parser import types
 
@@ -72,3 +74,21 @@ class Namespace(dict, subscribe.Subscribeable):
                     return v
             else:
                 return types.ENil
+
+    @annotate
+    def import_module(
+        self,
+        module: str,
+        names=typing.Union[typing.Literal["all"], tuple[str]],
+    ):
+        mod = importlib.import_module(module)
+        if names == "all":
+            if hasattr(mod, "__all__"):
+                names = mod.__all__
+            else:
+                names = [x for x in dir(mod) if not x[0] == "_"]
+        assert isinstance(
+            names, typing.Iterable
+        ), "names param should be iterable or None"
+        for name in names:
+            self[name] = getattr(mod, name)

@@ -40,6 +40,19 @@ class CompParams:
         """Pass in the parameters to handle."""
         self.params = params
 
+    @classmethod
+    def from_class(cls, defcls):
+        attrs = {}
+        for name, ann in defcls.__annotations__.items():
+            attrs[name] = (ann, types.ENil)
+        for name, val in vars(defcls).items():
+            if name[0] != "_":
+                if name in attrs:
+                    attrs[name] = (attrs[name][0], val)
+                else:
+                    attrs[name] = (typing.Any, val)
+        return cls(attrs)
+
     def bind(
         self,
         args: "dict[str, types.EObject]",
@@ -79,13 +92,14 @@ class CompArgs(dict, subscribe.Subscribeable):
         for name, val in self.values.items():
             names = name.split(":")
             if names[0] not in self.params.params:
-                raise ValueError(f"Wrong attr {name}")
+                raise ValueError(f"Wrong attr {name}.")
             base = vals
             for sub_name in names[:-1]:
                 if sub_name not in base:
                     base[sub_name] = dict()
                 elif not isinstance(base[sub_name], dict):
                     base[sub_name] = dict(_val=base[sub_name])
+                base = base[sub_name]
             base[names[-1]] = val
         final = {}
         for name, (spec, default) in self.params.params.items():
@@ -126,6 +140,7 @@ class Component(subscribe.Subscriber):
     subscriber: "subscribe.Subscriber"
     args: CompArgs
     children: "list[Component]"
+    parent: "Component"
 
     def add_child_component(self, component: "Component"):
         """Add `component` to self children."""
@@ -136,7 +151,7 @@ class Component(subscribe.Subscriber):
         self,
         namespace: "namespace.Namespace",
         args: CompArgs,
-        parent: "typing.Optional[Component]",
+        parent: "typing.Optional[Component]" = None,
     ):
         self.args = args
         self.subscriber = subscribe.Subscriber()
@@ -158,7 +173,8 @@ class Component(subscribe.Subscriber):
     def render(self):
         ret = self.prerender()
         for child in self.children:
-            child.render()
+            if child is not None:
+                child.render()
         return self.postrender() or ret
 
     def prerender(self):

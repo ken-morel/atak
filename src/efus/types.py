@@ -7,14 +7,13 @@ from . import component
 from . import namespace
 from . import subscribe
 from abc import ABC
-from decimal import Decimal
 from pyoload import *
 
 
 class EObject(ABC, subscribe.Subscribeable):
     """Efus base object value class."""
 
-    value: typing.Any
+    value: typing.Any = None
 
     def __init__(self, value: typing.Any = None):
         """Initialize default for EObject Subsclasses."""
@@ -74,7 +73,7 @@ class EAllType(EObject):
         return cls.val
 
     def __init__(self):
-        """Create a NilType object."""
+        """Create a EAllType object."""
 
     def __bool__(self) -> bool:
         return False
@@ -85,7 +84,7 @@ class EAllType(EObject):
     @classmethod
     @annotate
     def eval(cls, namespace: "namespace.Namespace") -> "ENilType":
-        """Convert ENil to python ENil(aka return ENil)."""
+        """Convert EAll to python EAll(aka return EAll)."""
         return cls()
 
     def __repr__(self):
@@ -98,11 +97,11 @@ EAll = EAllType()
 class ENumber(EObject):
     """Efus Number object."""
 
-    value: int | Decimal
+    value: int | float
 
     @annotate
-    def eval(self, namespace: "namespace.Namespace") -> int | Decimal:
-        """Return the python Decimal or int."""
+    def eval(self, namespace: "namespace.Namespace") -> int | float:
+        """Return the python float or int."""
         return self.value
 
 
@@ -182,32 +181,48 @@ class TagDef(EInstr):
 
 @dataclasses.dataclass
 @annotate
-class UsingDef(EInstr):
+class RootDef(EInstr):
     """Tag definition code."""
 
-    name: str
-    aliasses: tuple[str] | ALL
     children: list[EInstr] = dataclasses.field(default_factory=list)
 
     @annotate
-    def _eval(
+    def eval(
+        self,
+        namespace: "namespace.Namespace",
+        parent_component: type(None) = None,
+    ) -> component.Component:
+        ret = None
+        for child_instruction in self.children:
+            print(child_instruction)
+            child_component = child_instruction.eval(namespace, None)
+            if child_component is not None:
+                ret = child_component
+        if "return" in namespace:
+            return namespace["return"]
+        else:
+            return ret
+
+
+@dataclasses.dataclass
+@annotate
+class UsingDef(EInstr):
+    """Tag definition code."""
+
+    module: str
+    names: typing.Optional[tuple[str]]
+    is_all: bool
+    children: list[EInstr] = dataclasses.field(default_factory=list)
+
+    @annotate
+    def eval(
         self,
         namespace: "namespace.Namespace",
         parent_component: typing.Optional[component.Component] = None,
-    ) -> component.Component:
-        try:
-            comp_class = namespace.get_name(self.name)
-        except NameError as e:
-            raise NameError(
-                f"Component {self.name!r} could not be"
-                + f" found in namespace. (#{e})"
-            ) from e
-        else:
-            comp = comp_class.create(
-                namespace, self.attributes, parent_component
-            )
-            namespace[self.alias] = comp
-            return comp
+    ) -> type(None):
+        namespace.import_module(
+            self.module, names="all" if self.is_all else self.names
+        )
 
 
 @annotate
@@ -237,10 +252,10 @@ class Efus(EObject):
 class EScalar(EObject):
     """Efus variable scalar multiple."""
 
-    coefficient: int | Decimal
+    coefficient: int | float
     multiple: str
 
-    def __init__(self, coefficient: int | Decimal, multiple: str):
+    def __init__(self, coefficient: int | float, multiple: str):
         """Create a scalar multiple of multiple."""
         super().__init__()
         self.coefficient = coefficient
@@ -307,6 +322,9 @@ class EPix:
 
     def __int__(self):
         return self.coeff
+
+
+px = EPix(1)
 
 
 @annotate
