@@ -1,0 +1,50 @@
+pages:
+  index:
+    welcome: |
+      # Taktk
+      **Bonne journee**! et bienvenue sur cette page d'essai(desole pour les accents :smile: ).
+      Ce programme est une demonstration du pouvoir, de la simplicite d'usage et
+      de la fonctionalite de `taktk`
+      taktk, se decompose en deux parts: *tak* qui signifie _ordonner_, et _tk_
+      pour `tkinter`
+      car c'est ce qu'il vise a faire, Ecrir des programmes tkinter plus ordone,
+      lisible.
+      Taktk est toujours en developpement, et j'apprecierait beaucoup de lire
+      de vos conseil or problemmes que vous rencotrerier en utilisant taktk
+      sur https://github.com/ken-morel/taktk/issues
+    next: Votre... vue d'enseble? >
+    login: Se connecter >
+  todos:
+    placeholder: Notez ici
+    mark-done: Fait
+    mark-undone: A faire
+    remove: &todosRm retirer
+    menu:
+      toggle: Toggle done
+      remove:  *todosRm
+      edit: edit
+  signin:
+    label:
+      name: "Nom: "
+      password: "Mot de passe: "
+    submit: Proceder >
+    gt_signin: < avez vous un compte? se connecter
+    gt_signup: < Pas de compte?, s'enregistrer
+  users:
+    view: visiter >
+nav:
+  back: < precedant
+  next: suivant >
+menu:
+  file:
+    __label__: Fichier
+    open: Ouvrir
+    recent:
+      __label__: Fichiers Recent
+  quit: Quitter
+  preferences:
+    __label__: Preferences
+    language: Langue
+    theme: Theme
+preferences:
+  success_modified: "Preferences modifie avec success, (PS: j'aime le francais!)"

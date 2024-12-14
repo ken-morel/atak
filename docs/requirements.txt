@@ -1,0 +1,2 @@
+sphinxawesome_theme
+sphinx-docsearch

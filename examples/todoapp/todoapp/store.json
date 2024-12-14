@@ -1,0 +1,78 @@
+{
+  "language": "english",
+  "theme": "cosmo",
+  "~~[$__pageStore__('todoapp.admin')]~~": {
+    "users": [
+      {
+        "uuid": "75cbf1d5-68cb-11ef-81b3-28d244ed9304",
+        "name": "ama",
+        "password": "02a6efa44deef545bc56c1aae1e1d9feb53d505bb269a2abd6efe8d8f4e237f2"
+      },
+      {
+        "uuid": "966ea413-68cb-11ef-9a04-28d244ed9304",
+        "name": "a",
+        "password": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"
+      },
+      {
+        "name": "",
+        "password": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "uuid": "a7be354b-6919-11ef-9755-28d244ed9304"
+      }
+    ],
+    "todos": [
+      {
+        "uuid": "9846f9f7-68cb-11ef-abd4-28d244ed9304",
+        "author_id": "966c42eb-68cb-11ef-b745-28d244ed9304",
+        "desc": "Enter you todo her please",
+        "done": false
+      },
+      {
+        "uuid": "30bafca2-68cc-11ef-8de1-28d244ed9304",
+        "author_id": "966ea413-68cb-11ef-9a04-28d244ed9304",
+        "desc": "wr",
+        "done": true
+      },
+      {
+        "uuid": "34dfdf46-68cc-11ef-9f92-28d244ed9304",
+        "author_id": "966ea413-68cb-11ef-9a04-28d244ed9304",
+        "desc": "er",
+        "done": false
+      },
+      {
+        "author_id": "966ea413-68cb-11ef-9a04-28d244ed9304",
+        "desc": "Enter you todo, like it!djdjdjddkjddkjdkdkdkkdkd and",
+        "done": true,
+        "uuid": "f7316748-68cd-11ef-9684-28d244ed9304"
+      },
+      {
+        "author_id": "75cbf1d5-68cb-11ef-81b3-28d244ed9304",
+        "desc": "No I do not!",
+        "done": false,
+        "uuid": "db7e079b-68ce-11ef-b30d-28d244ed9304"
+      },
+      {
+        "author_id": "75cbf1d5-68cb-11ef-81b3-28d244ed9304",
+        "desc": "Or do I@ msjdjd",
+        "done": false,
+        "uuid": "e13a94dd-68ce-11ef-b4f3-28d244ed9304"
+      },
+      {
+        "author_id": "a7be354b-6919-11ef-9755-28d244ed9304",
+        "desc": "df",
+        "done": true,
+        "uuid": "ade6b013-6919-11ef-b74c-28d244ed9304"
+      }
+    ]
+  },
+  "~~[$__pageStore__('todoapp.pages.todos')]~~": {
+    "~~[$__partition__('a')]~~": {
+      "entry": "kklklkdffge"
+    },
+    "~~[$__partition__('ama')]~~": {
+      "entry": "nope!"
+    },
+    "~~[$__partition__('')]~~": {
+      "entry": ""
+    }
+  }
+}
