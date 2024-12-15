@@ -32,6 +32,13 @@ class ENilType(EObject):
 
     val = None
 
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        return ENil
+
+    def cast_to(self, typ: typing.Any, namespace=None):
+        raise NotImplementedError()
+
     def __new__(cls):
         """Return or create the singleton ENil."""
         if cls.val is None:
@@ -47,6 +54,9 @@ class ENilType(EObject):
     def __hash__(self):
         return 1
 
+    def __repr__(self):
+        return "ENil"
+
     @classmethod
     @annotate
     def eval(cls, namespace: "namespace.Namespace") -> "ENilType":
@@ -61,6 +71,10 @@ class EAllType(EObject):
     """Efus ENil type."""
 
     val = None
+
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        raise TypeError("Cannot cast to EAllType")
 
     def __new__(cls):
         """Return or create the singleton ENil."""
@@ -96,6 +110,16 @@ class ENumber(EObject):
 
     value: int | float
 
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        if isinstance(val, float):
+            return ENumber(val)
+        else:
+            return ENumber(int(val))
+
+    def cast_to(self, type: typing.Any, namespace: type(None) = None):
+        return type(self.value)
+
     @annotate
     def eval(self, namespace: "namespace.Namespace") -> int | float:
         """Return the python float or int."""
@@ -107,6 +131,13 @@ class EStr(EObject):
     """Efus Integer object."""
 
     value: str
+
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        return EStr(str(val))
+
+    def cast_to(self, type: typing.Any, namespace: type(None) = None):
+        return type(self.value)
 
     @annotate
     def eval(self, namespace: "namespace.Namespace") -> str:
@@ -251,6 +282,17 @@ class EScalar(EObject):
     coefficient: int | float
     multiple: str
 
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        raise NotImplementedError("conversion to EScalar not implemented.")
+
+    def cast_to(
+        cls,
+        type: typing.Any,
+        namespace: "typing.Optional[namespace.Namespace]" = None,
+    ):
+        return type(self.eval(namespace))
+
     @annotate
     def __init__(self, coefficient: int | float, multiple: str):
         """Create a scalar multiple of multiple."""
@@ -272,6 +314,13 @@ class EPix:
     Represents a scalar number of pixels."""
 
     coeff: int
+
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        return EPix(int(val))
+
+    def cast_to(cls, type: typing.Any, namespace: type(None) = None):
+        return type(self.coeff)
 
     @annotate(
         comments=dict(coeff="Pixel coefficient can only be a whole number.")
@@ -328,6 +377,16 @@ px = EPix(1)
 @annotate
 class ESize(EObject):
     value: tuple[int | float, int | float]
+
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        try:
+            return ESize(tuple(val))
+        except Exception as e:
+            raise TypeError(f"Cannot convert to ESize since {e}") from e
+
+    def cast_to(cls, type: typing.Any, namespace: type(None) = None):
+        return type(self.value)
 
     @annotate
     def __init__(
@@ -391,6 +450,18 @@ class EVar(EObject):
 
     name: str
 
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        if isinstance(val, str):
+            return EVar(val)
+        else:
+            raise TypeError("Can only cast str to EVar.")
+
+    def cast_to(
+        cls, type: typing.Any, namespace: "namespace.Namespace" = None
+    ):
+        return type(self.eval(namespace))
+
     @annotate
     def __init__(self, name: str):
         """Create a named variable alias."""
@@ -412,6 +483,18 @@ class EExpr(EObject):
 
     expr: str
 
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        if isinstance(val, str):
+            return EExpr(val)
+        else:
+            raise TypeError("Can only cast str to EVar.")
+
+    def cast_to(
+        cls, type: typing.Any, namespace: "namespace.Namespace" = None
+    ):
+        return type(self.eval(namespace))
+
     @annotate
     def __init__(self, expr: str):
         """Create a named variable alias."""
@@ -432,6 +515,18 @@ class Binding(EObject):
 @annotate
 class ENameBinding(Binding):
     name: str
+
+    @classmethod
+    def cast_from(cls, val: typing.Any):
+        if isinstance(val, str):
+            return ENameBinding(val)
+        else:
+            raise TypeError("Can only cast str to ENameBinding.")
+
+    def cast_to(
+        cls, type: typing.Any, namespace: "namespace.Namespace" = None
+    ):
+        return type(self.eval(namespace))
 
     @annotate
     def __init__(self, name: str):

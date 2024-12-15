@@ -104,7 +104,7 @@ class Namespace(dict, subscribe.Subscribeable):
 
 
 @annotate
-class NameBinding(types.EObject, subscribe.Subscribeable):
+class NameBinding(types.Binding, subscribe.Subscribeable):
     name: str
     namespace: Namespace
     subscriber: subscribe.Subscriber

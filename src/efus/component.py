@@ -10,10 +10,13 @@ Classes defined here are:
 import inspect
 import typing
 
+from types import UnionType
+
 from . import namespace
 from . import subscribe
 from . import types
 from pyoload import *
+from types import UnionType
 
 ParamDef = dict[
     str,  # name
@@ -34,25 +37,39 @@ class CompParams:
     :py:`{"name": (str, "John Doe")}`
     """
 
-    params: ParamDef
+    params: dict[str, tuple[typing.Any, typing.Any]]
+    component_name: str
 
     @annotate
-    def __init__(self, params: ParamDef):
+    def __init__(self, params: ParamDef, component_name: str):
         """Pass in the parameters to handle."""
         self.params = params
+        self.component_name = component_name
 
     @classmethod
-    def from_class(cls, defcls):
+    @annotate
+    def from_class(cls, defcls, component_name: str = "<unknown component>"):
+        return cls(cls._defs_from_class(defcls), component_name)
+
+    @classmethod
+    def _defs_from_class(
+        cls, defcls
+    ) -> dict[str, tuple[typing.Any, typing.Any]]:
         attrs = {}
         for name, ann in defcls.__annotations__.items():
             attrs[name] = (ann, types.ENil)
         for name, val in vars(defcls).items():
-            if name[0] != "_":
-                if name in attrs:
+            if not name.startswith("_"):
+                if inspect.isclass(val):
+                    for subname, spec_and_def in cls._defs_from_class(
+                        val
+                    ).items():
+                        attrs[name + ":" + subname] = spec_and_def
+                elif name in attrs:
                     attrs[name] = (attrs[name][0], val)
                 else:
                     attrs[name] = (typing.Any, val)
-        return cls(attrs)
+        return attrs
 
     def bind(
         self,
@@ -62,11 +79,17 @@ class CompParams:
         return CompArgs(self, args, namespace)
 
 
+def _decomposed_union(type):
+    if typing.get_origin(type) in (typing.Union, UnionType):
+        return typing.get_args(type)
+    else:
+        return (type,)
+
+
 @annotate
 class CompArgs(dict, subscribe.Subscribeable):
-    params: CompParams
+    # params: CompParams
     values: "dict[str, types.EObject]"
-    rawvalues: "dict[str, types.EObject]"
     namespace: "typing.Optional[namespace.Namespace]"
     subscriber: "subscribe.Subscriber"
 
@@ -76,86 +99,81 @@ class CompArgs(dict, subscribe.Subscribeable):
         params: CompParams,
         values: "dict[str, types.EObject]",
         namespace: "typing.Optional[namespace.Namespace]" = None,
+        component: "Component" = None,
     ):
-        self.params = params
         self.rawvalues = values
         self.namespace = namespace
         dict.__init__(self)
         subscribe.Subscribeable.__init__(self)
         self.subscriber = subscribe.Subscriber()
-        self.prepare_values()
-
-    def prepare_values(self):
         self.values = {}
-        for key, value in self.rawvalues.items():
-            if isinstance(value, types.ENameBinding):
-                self.values[key] = sub = value.eval(self.namespace)
-                self.subscriber.subscribe_to(
-                    sub,
-                    lambda s=self, n=key.split(":", 1)[0]: s.arg_changed(n),
+        for name, (typespec, default) in params.params.items():
+            if name in values:
+                val = self.values[name] = (
+                    typespec,
+                    values[name].eval(namespace),
                 )
+                if types.Binding in _decomposed_union(typespec) and isinstance(
+                    val, types.Binding
+                ):
+                    self.subscriber.subscribe_to(
+                        val, lambda s=self, n=name: s.arg_changed(n)
+                    )
+                values.pop(name)
             else:
-                self.values[key] = value
+                self.values[name] = (typespec, default)
+        if len(values) > 0:
+            raise ValueError(
+                f"wrong arg {next(iter(values.keys()))} for component of type {params.component_name}"
+            )
 
-    @annotate
-    def eval(
-        self,
-        namespace: "typing.Optional[namespace.Namespace]" = None,
-        only_name: typing.Optional[str] = None,
-    ) -> "CompArgs":
-        namespace = namespace or self.namespace
-        if namespace is None:
-            raise TypeError("No namespace specified to evaluate arguments.")
-        vals = {}
-        for name, val in self.values.items():
-            if only_name is not None and not name.startswith(only_name):
-                continue
-            names = name.split(":")
-            if names[0] not in self.params.params:
-                raise ValueError(f"Wrong attr {name}.")
-            base = vals
-            for sub_name in names[:-1]:
-                if sub_name not in base:
-                    base[sub_name] = dict()
-                elif not isinstance(base[sub_name], dict):
-                    base[sub_name] = dict(_val=base[sub_name])
-                base = base[sub_name]
-            base[names[-1]] = val
-        final = {}
-        for name, (spec, default) in self.params.params.items():
-            if name in vals:
-                final[name] = self.casts(spec, vals[name])
-                print(vals)
-            else:
-                final[name] = self.casts(spec, default)
-            m, msg = type_match(final[name], spec)
-            if not m:
-                raise TypeError(
-                    f"Value {final[name]} does not conform to"
-                    + f" parameter {name!r}:{spec}"
-                    + f". Pyoload says: {msg or 'Nothing else.'}",
-                )
-        self.update(final)
+    def eval(self):
+        self.clear()
+        print("VALUES" * 10, self.values)
+        for composite_name, (spec, value) in self.values.items():
+            names = composite_name.split(":")
+            base = self
+            for name in names[:-1]:
+                if name not in base:
+                    base[name] = dict()
+                base = base[name]
+            value = self.casts(value, spec)
+            base[names[-1]] = value
         return self
 
     def __repr__(self):
         return f"CompArgs({dict.__repr__(self)})"
 
     def casts(
-        self, spec: typing.Union[typing.Type, typing.Callable], val: typing.Any
+        self, val: typing.Any, spec: typing.Union[typing.Type, typing.Callable]
     ) -> typing.Any:
-        if type_match(val, spec)[0]:
-            return v
-        elif isinstance(val, types.EObject):
-            return self.casts(spec, val.eval(self.namespace))
+        if typing.get_origin(spec) in (typing.Union, UnionType):
+            specs = typing.get_args(spec)
+
+            for spec in specs:
+                try:
+                    return self.casts(val, spec)
+                except Exception:
+                    pass
+        elif typing.get_origin(spec) in (dict, typing.Dict):
+            keyt, valt = typing.get_args(spec)
+            return {
+                self.casts(k, keyt): self.casts(v, valt)
+                for k, v in val.items()
+            }
         else:
-            if issubclass(spec, typing.Union):
-                for sub_spec in inspect.get_args(spec):
-                    try:
-                        return self.casts(sub_spec, val)
-                    except NotImplemented:
-                        pass
-            raise NotImplementedError(spec, val)
+            if type_match(val, spec)[0]:
+                return val
+            elif issubclass(spec, types.EObject):
+                return spec.cast_from(val)
+            elif isinstance(val, types.EObject):
+                return val.cast_to(spec, namespace=self.namespace)
+            else:
+                try:
+                    return spec(val)
+                except Exception:
+                    pass
+                raise NotImplementedError(val, spec)
 
     @annotate
     def arg_changed(self, name: str):
@@ -180,16 +198,18 @@ class Component(subscribe.Subscriber):
     def __init__(
         self,
         namespace: "namespace.Namespace",
-        args: CompArgs,
+        args: CompArgs | typing.Callable,
         parent: "typing.Optional[Component]" = None,
     ):
+        if callable(args):
+            args = args(self)
         self.args = args
+        args.eval()
         self.subscriber = subscribe.Subscriber()
         self.namespace = namespace
         self.subscriber.subscribe_to(args, self.update)
         self.parent = parent
         self.children = []
-        args.eval()
         self.init()
 
     @annotate
