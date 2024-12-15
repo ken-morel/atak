@@ -15,6 +15,7 @@ class Parser:
     tree: list[tuple[int, types.EInstr]]
     file: Optional[str]
     SPACE = frozenset(" \t")
+    STRING_QUOTE = format("\"'")
     tag_def = re.compile(r"(?P<name>[\w]+)(?:\&(?P<alias>[\w]+))?(?=$|\s|\n)")
     tag_name = re.compile(r"(?P<name>\w[\w\d\:]*)\=")
     decimal = re.compile(r"([+\-]?\d+(?:\.\d+)?)(?=$|\s|\n)")
@@ -49,12 +50,14 @@ class Parser:
         self.parsed = []
         self.file = file
 
-    def feed(self, text: str) -> tuple[types.EInstr]:
+    @annotate
+    def feed(self, text: str) -> types.RootDef:
         """Feed code in parser."""
         self.text += text
         self.go_ahead()
         return self.tree[0][1]
 
+    @annotate
     def go_ahead(self):
         """Read and interpret the next instructions."""
         while True:  # For each logical line
@@ -62,28 +65,22 @@ class Parser:
                 indent = self.next_indent()
             except Parser._EOF:  # Getcha that next line!
                 break
-            print("INDENT", indent, flush=True)
             if (
                 using := Parser.using.search(self.text, self.idx)
             ) is not None and using.span()[0] == self.idx:
-                print("  USING", using, using.groups(), flush=True)
                 self.idx += using.span()[1] - using.span()[0]
                 module = using.groups()[0]
                 names = using.groups()[2]
-                is_all = using.groups()[1] is not None
                 if names is not None:
                     names = tuple(map(str.strip, names.split(",")))
                     if is_all:
                         raise Parser.SyntaxError(
                             "Can not import names and * at same time."
                         )
-                self._queue_instr(
-                    indent, types.UsingDef(module, names, is_all)
-                )
+                self._queue_instr(indent, types.UsingDef(module, names))
             elif (
                 tag := Parser.tag_def.search(self.text, self.idx)
             ) is not None and tag.span()[0] == self.idx:
-                print("  TAG", tag, flush=True)
                 self.idx += tag.span()[1] - tag.span()[0]
                 groups = tag.groupdict()
                 attrs = dict(self.parse_attrs())
@@ -92,7 +89,8 @@ class Parser:
             else:
                 raise Exception()
 
-    def _queue_instr(self, indent, instr):
+    @annotate
+    def _queue_instr(self, indent: int, instr: types.EInstr):
         if len(self.tree) == 0:
             self.tree = [(indent, instr)]
         else:
@@ -111,10 +109,11 @@ class Parser:
                             f"Fatal: Code has two heads\n{self}"
                         )
                 self.tree[-1][1].add_child_instruction(instr)
-                self.tree.append((indent, self))
+                self.tree.append((indent, instr))
 
-    def parse_attrs(self) -> list[tuple]:
-        """Parse next following attrs. :py:`int(3) + 4`"""
+    @annotate
+    def parse_attrs(self) -> list[tuple[str, types.EObject]]:
+        """Parse next following attrs.."""
         attrs = []
         try:
             while True:
@@ -123,6 +122,7 @@ class Parser:
             pass
         return attrs
 
+    @annotate
     def parse_next_attr_value(self) -> list[tuple]:
         self.inline_spaces()
         name = Parser.tag_name.search(self.text, self.idx)
@@ -163,7 +163,7 @@ class Parser:
                 return types.EScalar(float(whole + decimal), multiple)
             else:
                 return types.EScalar(int(whole), multiple)
-        elif (b := self.text[self.idx]) in "'\"":
+        elif (b := self.text[self.idx]) in Parser.STRING_QUOTE:
             begin = self.idx
             self.idx += 1
             while self.idx < len(self.text):
@@ -179,6 +179,45 @@ class Parser:
             else:
                 raise Parser.SyntaxError("Untermated string at _EOF")
             return types.EStr(eval(self.text[begin : self.idx]))
+        elif self.text[self.idx] == "(":
+            begin = self.idx + 1
+            quotes = []
+            while self.idx < len(self.text):
+                if (
+                    len(quotes) > 0
+                    and quotes[-1] in Parser.STRING_QUOTE
+                    and self.text[self.idx] == "\\"
+                ):
+                    self.idx += 1
+                elif self.text[self.idx] in Parser.STRING_QUOTE:
+                    if len(quotes) > 0 and quotes[-1] == self.text[self.idx]:
+                        quotes.pop()
+                    else:
+                        quotes.append(self.text[self.idx])
+                elif self.text[self.idx] == "(":
+                    quotes.append("(")
+                elif self.text[self.idx] == ")":
+                    quotes.pop()
+                    if len(quotes) == 0:
+                        self.idx += 1
+                        break
+                self.idx += 1
+            else:
+                raise Parser.SyntaxError("Untermated expr at EOF")
+            return types.EExpr(self.text[begin : self.idx - 1])
+        elif self.text[self.idx] == "&":
+            self.idx += 1
+            begin = self.idx
+            if self.text[self.idx] == "(":
+                raise NotImplementedError
+            else:
+                while (
+                    self.idx < len(self.text)
+                    and not self.text[self.idx].isspace()
+                ):
+                    self.idx += 1
+                return types.ENameBinding(self.text[begin : self.idx])
+
         else:
             raise Parser.SyntaxError("Unknown literal\n" + self.py_stack())
 

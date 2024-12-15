@@ -7,6 +7,7 @@ Classes defined here are:
 - `Component`
 """
 
+import inspect
 import typing
 
 from . import namespace
@@ -65,7 +66,9 @@ class CompParams:
 class CompArgs(dict, subscribe.Subscribeable):
     params: CompParams
     values: "dict[str, types.EObject]"
+    rawvalues: "dict[str, types.EObject]"
     namespace: "typing.Optional[namespace.Namespace]"
+    subscriber: "subscribe.Subscriber"
 
     @annotate
     def __init__(
@@ -75,21 +78,38 @@ class CompArgs(dict, subscribe.Subscribeable):
         namespace: "typing.Optional[namespace.Namespace]" = None,
     ):
         self.params = params
-        self.values = values
+        self.rawvalues = values
         self.namespace = namespace
         dict.__init__(self)
         subscribe.Subscribeable.__init__(self)
+        self.subscriber = subscribe.Subscriber()
+        self.prepare_values()
+
+    def prepare_values(self):
+        self.values = {}
+        for key, value in self.rawvalues.items():
+            if isinstance(value, types.ENameBinding):
+                self.values[key] = sub = value.eval(self.namespace)
+                self.subscriber.subscribe_to(
+                    sub,
+                    lambda s=self, n=key.split(":", 1)[0]: s.arg_changed(n),
+                )
+            else:
+                self.values[key] = value
 
     @annotate
     def eval(
-        self, namespace: "typing.Optional[namespace.Namespace]" = None
+        self,
+        namespace: "typing.Optional[namespace.Namespace]" = None,
+        only_name: typing.Optional[str] = None,
     ) -> "CompArgs":
         namespace = namespace or self.namespace
         if namespace is None:
             raise TypeError("No namespace specified to evaluate arguments.")
-        self.clear()
         vals = {}
         for name, val in self.values.items():
+            if only_name is not None and not name.startswith(only_name):
+                continue
             names = name.split(":")
             if names[0] not in self.params.params:
                 raise ValueError(f"Wrong attr {name}.")
@@ -104,21 +124,17 @@ class CompArgs(dict, subscribe.Subscribeable):
         final = {}
         for name, (spec, default) in self.params.params.items():
             if name in vals:
-                value = vals[name]
-                final[name] = self.casts(
-                    spec,
-                    value.eval(self.namespace)
-                    if isinstance(value, types.EObject)
-                    else value,
-                )
+                final[name] = self.casts(spec, vals[name])
+                print(vals)
             else:
-                final[name] = default
-        m, msg = type_match(final[name], spec)
-        if not m:
-            raise TypeError(
-                f"Value does not conform to parameter {name!r}:{spec}"
-                + f". Pyoload says: {msg or 'Nothing else.'}",
-            )
+                final[name] = self.casts(spec, default)
+            m, msg = type_match(final[name], spec)
+            if not m:
+                raise TypeError(
+                    f"Value {final[name]} does not conform to"
+                    + f" parameter {name!r}:{spec}"
+                    + f". Pyoload says: {msg or 'Nothing else.'}",
+                )
         self.update(final)
         return self
 
@@ -128,10 +144,24 @@ class CompArgs(dict, subscribe.Subscribeable):
     def casts(
         self, spec: typing.Union[typing.Type, typing.Callable], val: typing.Any
     ) -> typing.Any:
-        if type_match(val, spec):
-            return val
+        if type_match(val, spec)[0]:
+            return v
+        elif isinstance(val, types.EObject):
+            return self.casts(spec, val.eval(self.namespace))
         else:
-            raise NotImplementedError()
+            if issubclass(spec, typing.Union):
+                for sub_spec in inspect.get_args(spec):
+                    try:
+                        return self.casts(sub_spec, val)
+                    except NotImplemented:
+                        pass
+            raise NotImplementedError(spec, val)
+
+    @annotate
+    def arg_changed(self, name: str):
+        self.eval(only_name=name)
+        self.warn_subscribers()
+        return self
 
 
 @annotate
@@ -156,7 +186,7 @@ class Component(subscribe.Subscriber):
         self.args = args
         self.subscriber = subscribe.Subscriber()
         self.namespace = namespace
-        self.subscriber.subscribe_to(namespace, self._namespace_change)
+        self.subscriber.subscribe_to(args, self.update)
         self.parent = parent
         self.children = []
         args.eval()

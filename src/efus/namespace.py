@@ -13,6 +13,7 @@ from pyoload import *
 # from .parser import types
 
 
+@annotate
 class Namespace(dict, subscribe.Subscribeable):
     """Component namespace."""
 
@@ -21,10 +22,12 @@ class Namespace(dict, subscribe.Subscribeable):
 
     @classmethod
     @functools.cache
-    def defaults(cls):
+    @annotate
+    def defaults(cls) -> dict[str, typing.Any]:
         """Get default and basic namespace variables provided by efus."""
         return {k: v for k, v in vars(constants).items() if not k[0] == "_"}
 
+    @annotate
     def __init__(self, parents: "tuple[Namespace]" = (), default: dict = {}):
         """Initialize with default value."""
         self.dirty = False
@@ -49,6 +52,7 @@ class Namespace(dict, subscribe.Subscribeable):
             return True
         return False
 
+    @annotate
     def get_name(self, name: str) -> typing.Any:
         """
         Return name or raise error.
@@ -60,10 +64,11 @@ class Namespace(dict, subscribe.Subscribeable):
         else:
             raise NameError(f"Name: {name} not in namespace {self!r}.")
 
+    @annotate
     def get(
         self, name: str, head: "typing.Optional[Namespace]" = None
     ) -> typing.Any:
-        """Search for `name` in self and parent namespaces."""
+        """Search for `name` in `self` and parent namespaces."""
         if name in self:
             return self[name]
         else:
@@ -92,3 +97,35 @@ class Namespace(dict, subscribe.Subscribeable):
         ), "names param should be iterable or None"
         for name in names:
             self[name] = getattr(mod, name)
+
+    @annotate
+    def create_binding(self, name: str) -> "NameBinding":
+        return NameBinding(self, name)
+
+
+@annotate
+class NameBinding(types.EObject, subscribe.Subscribeable):
+    name: str
+    namespace: Namespace
+    subscriber: subscribe.Subscriber
+    _last: typing.Any
+
+    @annotate
+    def __init__(self, namespace: Namespace, name: str):
+        self.subscriber = subscribe.Subscriber()
+        self.name = name
+        self.namespace = namespace
+        subscribe.Subscribeable.__init__(self)
+        self.subscriber.subscribe_to(namespace, self._namespace_change)
+        try:
+            self._last = self.eval()
+        except Exception:
+            self._last = None
+
+    def eval(self, _=None) -> typing.Any:
+        return self.namespace.get_name(self.name)
+
+    def _namespace_change(self):
+        if self._last != (val := self.eval()):
+            self._last = val
+            self.warn_subscribers()

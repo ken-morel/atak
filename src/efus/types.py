@@ -13,11 +13,10 @@ from pyoload import *
 class EObject(ABC, subscribe.Subscribeable):
     """Efus base object value class."""
 
-    value: typing.Any = None
-
     def __init__(self, value: typing.Any = None):
         """Initialize default for EObject Subsclasses."""
-        self.value = value
+        if value is not None:
+            self.value = value
 
     @annotate
     def eval(self, namespace: "namespace.Namespace"):
@@ -26,9 +25,6 @@ class EObject(ABC, subscribe.Subscribeable):
             f"Cannot convert object of type {self.__class__.__name__} "
             + "to python ewuivalent."
         )
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self.value!r})"
 
 
 class ENilType(EObject):
@@ -94,6 +90,7 @@ class EAllType(EObject):
 EAll = EAllType()
 
 
+@annotate
 class ENumber(EObject):
     """Efus Number object."""
 
@@ -105,6 +102,7 @@ class ENumber(EObject):
         return self.value
 
 
+@annotate
 class EStr(EObject):
     """Efus Integer object."""
 
@@ -194,7 +192,6 @@ class RootDef(EInstr):
     ) -> component.Component:
         ret = None
         for child_instruction in self.children:
-            print(child_instruction)
             child_component = child_instruction.eval(namespace, None)
             if child_component is not None:
                 ret = child_component
@@ -211,7 +208,6 @@ class UsingDef(EInstr):
 
     module: str
     names: typing.Optional[tuple[str]]
-    is_all: bool
     children: list[EInstr] = dataclasses.field(default_factory=list)
 
     @annotate
@@ -220,9 +216,7 @@ class UsingDef(EInstr):
         namespace: "namespace.Namespace",
         parent_component: typing.Optional[component.Component] = None,
     ) -> type(None):
-        namespace.import_module(
-            self.module, names="all" if self.is_all else self.names
-        )
+        namespace.import_module(self.module, names=self.names or "all")
 
 
 @annotate
@@ -236,9 +230,11 @@ class Efus(EObject):
         """Create efus code object."""
         self.parent_instruction = parent_instruction
 
+    @annotate
     def __repr__(self):
         return str(self.parent_instruction)
 
+    @annotate
     def translate(
         self, namespace: "namespace.Namespace"
     ) -> component.Component:
@@ -255,13 +251,15 @@ class EScalar(EObject):
     coefficient: int | float
     multiple: str
 
+    @annotate
     def __init__(self, coefficient: int | float, multiple: str):
         """Create a scalar multiple of multiple."""
         super().__init__()
         self.coefficient = coefficient
         self.multiple = multiple
 
-    def eval(self, namespace: "namespace.Namespace"):
+    @annotate
+    def eval(self, namespace: "namespace.Namespace") -> typing.Any:
         """Return the scalar product of multiple and coefficient."""
         return self.coefficient * namespace.get_name(self.multiple)
 
@@ -387,16 +385,59 @@ class ESize(EObject):
         return self
 
 
+@annotate
 class EVar(EObject):
     """Efus variable alias."""
 
     name: str
 
+    @annotate
     def __init__(self, name: str):
         """Create a named variable alias."""
         super().__init__()
         self.name = name
 
+    @annotate
     def eval(self, namespace: "namespace.Namespace") -> typing.Any:
         """Get the given variavle in the namespace."""
-        return namespace.get(self.name)
+        return namespace.get_name(self.name)
+
+    def __repr__(self):
+        return f"EVar({self.name})"
+
+
+@annotate
+class EExpr(EObject):
+    """Efus expression."""
+
+    expr: str
+
+    @annotate
+    def __init__(self, expr: str):
+        """Create a named variable alias."""
+        super().__init__()
+        self.expr = expr
+
+    @annotate
+    def eval(self, namespace: "namespace.Namespace") -> typing.Any:
+        """Get the given variavle in the namespace."""
+        return eval(self.expr, namespace)
+
+
+@annotate
+class Binding(EObject):
+    pass
+
+
+@annotate
+class ENameBinding(Binding):
+    name: str
+
+    @annotate
+    def __init__(self, name: str):
+        self.name = name
+
+    def eval(
+        self, namespace: "namespace.Namespace"
+    ) -> "namespace.NameBinding":
+        return namespace.create_binding(self.name)
