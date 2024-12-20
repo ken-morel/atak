@@ -1,11 +1,11 @@
 """Holds the namespace class, responsible for efus component namespaces."""
 
 
+import contextlib
 import functools
 import importlib
 import typing
 
-from . import constants
 from . import subscribe
 from . import types
 from pyoload import *
@@ -25,6 +25,8 @@ class Namespace(dict, subscribe.Subscribeable):
     @annotate
     def defaults(cls) -> dict[str, typing.Any]:
         """Get default and basic namespace variables provided by efus."""
+        from . import constants
+
         return {k: v for k, v in vars(constants).items() if not k[0] == "_"}
 
     @annotate
@@ -102,6 +104,14 @@ class Namespace(dict, subscribe.Subscribeable):
     def create_binding(self, name: str) -> "NameBinding":
         return NameBinding(self, name)
 
+    @contextlib.contextmanager
+    @annotate
+    def save(self):
+        current = dict.copy(self)
+        yield
+        dict.clear(self)
+        dict.update(self, current)
+
 
 @annotate
 class NameBinding(types.Binding, subscribe.Subscribeable):
@@ -124,6 +134,14 @@ class NameBinding(types.Binding, subscribe.Subscribeable):
 
     def eval(self, _=None) -> typing.Any:
         return self.namespace.get_name(self.name)
+
+    def get(self):
+        return self.eval()
+
+    def set(self, val: typing.Any):
+        self.namespace[self.name] = val
+        self.warn_subscribers()
+        self.namespace.update()
 
     def _namespace_change(self):
         if self._last != (val := self.eval()):

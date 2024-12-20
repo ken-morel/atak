@@ -12,10 +12,11 @@ class Parser:
 
     idx: int
     text: str
-    tree: list[tuple[int, types.EInstr]]
+    tree: "list[tuple[int, types.EInstr]]"
     file: Optional[str]
     SPACE = frozenset(" \t")
     STRING_QUOTE = format("\"'")
+    TAML_TOKEN = ("---\n", "\n...")
     tag_def = re.compile(r"(?P<name>[\w]+)(?:\&(?P<alias>[\w]+))?(?=$|\s|\n)")
     tag_name = re.compile(r"(?P<name>\w[\w\d\:]*)\=")
     decimal = re.compile(r"([+\-]?\d+(?:\.\d+)?)(?=$|\s|\n)")
@@ -51,7 +52,7 @@ class Parser:
         self.file = file
 
     @annotate
-    def feed(self, text: str) -> types.RootDef:
+    def feed(self, text: str) -> "types.RootDef":
         """Feed code in parser."""
         self.text += text
         self.go_ahead()
@@ -73,10 +74,6 @@ class Parser:
                 names = using.groups()[2]
                 if names is not None:
                     names = tuple(map(str.strip, names.split(",")))
-                    if is_all:
-                        raise Parser.SyntaxError(
-                            "Can not import names and * at same time."
-                        )
                 self._queue_instr(indent, types.UsingDef(module, names))
             elif (
                 tag := Parser.tag_def.search(self.text, self.idx)
@@ -90,7 +87,7 @@ class Parser:
                 raise Exception()
 
     @annotate
-    def _queue_instr(self, indent: int, instr: types.EInstr):
+    def _queue_instr(self, indent: int, instr: "types.EInstr"):
         if len(self.tree) == 0:
             self.tree = [(indent, instr)]
         else:
@@ -112,7 +109,7 @@ class Parser:
                 self.tree.append((indent, instr))
 
     @annotate
-    def parse_attrs(self) -> list[tuple[str, types.EObject]]:
+    def parse_attrs(self) -> "list[tuple[str, types.EObject]]":
         """Parse next following attrs.."""
         attrs = []
         try:
@@ -134,7 +131,18 @@ class Parser:
             return []
 
     def parse_next_value(self):
-        if (m := Parser.const_var.search(self.text, self.idx)) and m.span()[
+        if self.text[self.idx :].startswith(Parser.YAML_TOKEN[0]):
+            self.idx += 4
+            begin = self.idx
+            end = self.text.find(Parser.YAML_TOKEN[1], self.idx)
+            if end == -1:
+                raise Parser.SyntaxError(
+                    "Untermated yaml markup", self.py_stack()
+                )
+            else:
+                self.idx = end + len(Parser.YAML_TOKEN[1])
+                return types.EYamlCode(self.text[begin:end])
+        elif (m := Parser.const_var.search(self.text, self.idx)) and m.span()[
             0
         ] == self.idx:
             self.idx += m.span()[1] - m.span()[0]
@@ -289,6 +297,11 @@ class Parser:
 
 
 @annotate
-def parse_file(path: str) -> types.Efus:
+def parse_file(path: str) -> "types.Efus":
     with open(path) as f:
-        return types.Efus(Parser(path).feed(f.read()))
+        return parse_code(f.read(), path)
+
+
+@annotate
+def parse_code(code: str, file: str = "<string>") -> "types.Efus":
+    return types.Efus(Parser(file).feed(code))

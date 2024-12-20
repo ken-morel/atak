@@ -231,8 +231,7 @@ if (-not $Env:VIRTUAL_ENV_DISABLE_PROMPT) {
 
     function global:prompt {
         _OLD_VIRTUAL_PROMPT
-        Write-Host -NoNewline -ForegroundColor Green "\n$_PYTHON_VENV_PROMPT_PREFIX"
-        Write-Host -ForegroundColor Blue "> "        
+        Write-Host -NoNewline -ForegroundColor Green "($_PYTHON_VENV_PROMPT_PREFIX) "
     }
     $env:VIRTUAL_ENV_PROMPT = $Prompt
 }

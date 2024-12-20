@@ -1,10 +1,13 @@
 """Efus base and complex types."""
+import contextlib
 import dataclasses
-
+import functools
 import typing
 
+import efus
+
 from . import component
-from . import namespace
+
 from . import subscribe
 from abc import ABC
 from pyoload import *
@@ -19,7 +22,7 @@ class EObject(ABC, subscribe.Subscribeable):
             self.value = value
 
     @annotate
-    def eval(self, namespace: "namespace.Namespace"):
+    def eval(self, namespace: "efus.namespace.Namespace"):
         """Evaluate to a python object."""
         raise NotImplementedError(
             f"Cannot convert object of type {self.__class__.__name__} "
@@ -59,7 +62,7 @@ class ENilType(EObject):
 
     @classmethod
     @annotate
-    def eval(cls, namespace: "namespace.Namespace") -> "ENilType":
+    def eval(cls, namespace: "efus.namespace.Namespace") -> "ENilType":
         """Convert ENil to python ENil(aka return ENil)."""
         return cls()
 
@@ -93,7 +96,7 @@ class EAllType(EObject):
 
     @classmethod
     @annotate
-    def eval(cls, namespace: "namespace.Namespace") -> "ENilType":
+    def eval(cls, namespace: "efus.namespace.Namespace") -> "ENilType":
         """Convert EAll to python EAll(aka return EAll)."""
         return cls()
 
@@ -121,7 +124,7 @@ class ENumber(EObject):
         return type(self.value)
 
     @annotate
-    def eval(self, namespace: "namespace.Namespace") -> int | float:
+    def eval(self, namespace: "efus.namespace.Namespace") -> int | float:
         """Return the python float or int."""
         return self.value
 
@@ -140,7 +143,7 @@ class EStr(EObject):
         return type(self.value)
 
     @annotate
-    def eval(self, namespace: "namespace.Namespace") -> str:
+    def eval(self, namespace: "efus.namespace.Namespace") -> str:
         """Return python string."""
         return self.value % namespace
 
@@ -158,9 +161,9 @@ class EInstr(EObject):
     @annotate
     def eval(
         self,
-        namespace: "namespace.Namespace",
-        parent_component: typing.Optional[component.Component] = None,
-    ) -> component.Component:
+        namespace: "efus.namespace.Namespace",
+        parent_component: "typing.Optional[component.Component]" = None,
+    ) -> "component.Component":
         """Run the instruction and children in given namespace."""
         self_component = self._eval(namespace, parent_component)
         for child_instruction in self.children:
@@ -171,9 +174,9 @@ class EInstr(EObject):
     @annotate
     def _eval(
         self,
-        namespace: "namespace.Namespace",
-        parent: typing.Optional[component.Component] = None,
-    ) -> component.Component:
+        namespace: "efus.namespace.Namespace",
+        parent: "typing.Optional[component.Component]" = None,
+    ) -> "component.Component":
         raise NotImplementedError("Override this function please.")
 
 
@@ -190,9 +193,9 @@ class TagDef(EInstr):
     @annotate
     def _eval(
         self,
-        namespace: "namespace.Namespace",
-        parent_component: typing.Optional[component.Component] = None,
-    ) -> component.Component:
+        namespace: "efus.namespace.Namespace",
+        parent_component: "typing.Optional[component.Component]" = None,
+    ) -> "component.Component":
         try:
             comp_class = namespace.get_name(self.name)
         except NameError as e:
@@ -218,18 +221,21 @@ class RootDef(EInstr):
     @annotate
     def eval(
         self,
-        namespace: "namespace.Namespace",
-        parent_component: type(None) = None,
-    ) -> component.Component:
+        namespace: "efus.namespace.Namespace",
+        parent_component: "typing.Optional[component.Component]" = None,
+    ) -> "component.Component":
         ret = None
-        for child_instruction in self.children:
-            child_component = child_instruction.eval(namespace, None)
-            if child_component is not None:
-                ret = child_component
-        if "return" in namespace:
-            return namespace["return"]
-        else:
-            return ret
+        with namespace.save():
+            namespace["return"] = ENil
+            for child_instruction in self.children:
+                ret = ret or child_instruction.eval(
+                    namespace, parent_component
+                )
+            if "return" in namespace and namespace["return"] is not ENil:
+                return namespace["return"]
+            else:
+                s
+                return ret
 
 
 @dataclasses.dataclass
@@ -244,8 +250,8 @@ class UsingDef(EInstr):
     @annotate
     def eval(
         self,
-        namespace: "namespace.Namespace",
-        parent_component: typing.Optional[component.Component] = None,
+        namespace: "efus.namespace.Namespace",
+        parent_component: "typing.Optional[component.Component]" = None,
     ) -> type(None):
         namespace.import_module(self.module, names=self.names or "all")
 
@@ -267,10 +273,12 @@ class Efus(EObject):
 
     @annotate
     def translate(
-        self, namespace: "namespace.Namespace"
-    ) -> component.Component:
+        self,
+        namespace: "efus.namespace.Namespace",
+        parent: "typing.Optional[component.Component]" = None,
+    ) -> "component.Component":
         """Evaluate the code in the given namespace."""
-        return self.parent_instruction.eval(namespace, None)
+        return self.parent_instruction.eval(namespace, parent)
 
     eval = translate
 
@@ -301,7 +309,7 @@ class EScalar(EObject):
         self.multiple = multiple
 
     @annotate
-    def eval(self, namespace: "namespace.Namespace") -> typing.Any:
+    def eval(self, namespace: "efus.namespace.Namespace") -> typing.Any:
         """Return the scalar product of multiple and coefficient."""
         return self.coefficient * namespace.get_name(self.multiple)
 
@@ -440,7 +448,7 @@ class ESize(EObject):
             self.value[1] - other.value[1],
         )
 
-    def eval(self, namespace: "namespace.Namespace") -> "ESize":
+    def eval(self, namespace: "efus.namespace.Namespace") -> "ESize":
         return self
 
 
@@ -458,7 +466,7 @@ class EVar(EObject):
             raise TypeError("Can only cast str to EVar.")
 
     def cast_to(
-        cls, type: typing.Any, namespace: "namespace.Namespace" = None
+        cls, type: typing.Any, namespace: "efus.namespace.Namespace" = None
     ):
         return type(self.eval(namespace))
 
@@ -469,7 +477,7 @@ class EVar(EObject):
         self.name = name
 
     @annotate
-    def eval(self, namespace: "namespace.Namespace") -> typing.Any:
+    def eval(self, namespace: "efus.namespace.Namespace") -> typing.Any:
         """Get the given variavle in the namespace."""
         return namespace.get_name(self.name)
 
@@ -491,7 +499,7 @@ class EExpr(EObject):
             raise TypeError("Can only cast str to EVar.")
 
     def cast_to(
-        cls, type: typing.Any, namespace: "namespace.Namespace" = None
+        cls, type: typing.Any, namespace: "efus.namespace.Namespace" = None
     ):
         return type(self.eval(namespace))
 
@@ -502,14 +510,108 @@ class EExpr(EObject):
         self.expr = expr
 
     @annotate
-    def eval(self, namespace: "namespace.Namespace") -> typing.Any:
+    def eval(self, namespace: "efus.namespace.Namespace") -> typing.Any:
         """Get the given variavle in the namespace."""
         return eval(self.expr, namespace)
 
 
 @annotate
-class Binding(EObject):
-    pass
+class Binding(EObject, subscribe.Subscribeable):
+    """Create a Writeable with subscribers and methods."""
+
+    @classmethod
+    @annotate
+    def from_get_set(
+        cls,
+        namespace: "efus.namespace.Namespace",
+        getter: typing.Callable,
+        setter: typing.Callable,
+        value: typing.Any = None,
+        getter_caller: str = "returns",
+        set_name: str = "value",
+    ) -> "Binding":
+        """Create a writeable only using get and set strings."""
+
+        def eval_gets():
+            return eval(getter, {}, namespace)
+
+        def call_gets():
+            response = None
+
+            def set_response(val):
+                nonlocal response
+                response = val
+
+            exec(getter, {getter_caller: set_response}, namespace)
+            return response
+
+        def call_sets(val):
+            with namespace.save_var(set_name):
+                namespace[set_name] = val
+                exec(setter, {}, namespace)
+
+        return cls(
+            value,
+            call_gets
+            if (len(getter) > 0 and getter[-1] == ";")
+            else eval_gets,
+            call_sets,
+        )
+
+    @classmethod
+    def from_name(
+        cls,
+        namespace: "efus.namespace.Namespace",
+        name: str,
+        value: typing.Any = None,
+    ):
+        """Create a writeable object from namespace and name binding."""
+
+        def getter():
+            return namespace[name]
+
+        def setter(val):
+            namespace[name] = val
+
+        return cls(value, getter, setter)
+
+    def __init__(
+        self,
+        val: typing.Any = None,
+        getter: typing.Optional[typing.Callable] = None,
+        setter: typing.Optional[typing.Callable] = None,
+    ):
+        """Create the object with the specified default value."""
+        self._value = val
+        self.last = val
+        self.subscribers = set()
+        self.getter = getter
+        self.setter = setter
+        subscribe.Subscribeable.__init__(self)
+
+    def set(self, value: typing.Any):
+        """Set the value of the Writeable, and watches changes."""
+        if self.setter is not None:
+            self.setter(value)
+        else:
+            self._value = value
+        self.watch_changes()
+
+    def watch_changes(self) -> bool:
+        """
+        Check if value changed and notify subscribers.
+
+        Returns if change was noticed
+        """
+        if self.last != (val := self.get()):
+            self.last = val
+            self.warn_subscribers()
+            return True
+        return False
+
+    def get(self):
+        """Return the value of the variable."""
+        return self.getter()
 
 
 @annotate
@@ -524,7 +626,7 @@ class ENameBinding(Binding):
             raise TypeError("Can only cast str to ENameBinding.")
 
     def cast_to(
-        cls, type: typing.Any, namespace: "namespace.Namespace" = None
+        cls, type: typing.Any, namespace: "efus.namespace.Namespace" = None
     ):
         return type(self.eval(namespace))
 
@@ -532,7 +634,8 @@ class ENameBinding(Binding):
     def __init__(self, name: str):
         self.name = name
 
+    @annotate
     def eval(
-        self, namespace: "namespace.Namespace"
-    ) -> "namespace.NameBinding":
+        self, namespace: "efus.namespace.Namespace"
+    ) -> "efus.namespace.NameBinding":
         return namespace.create_binding(self.name)
