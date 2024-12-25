@@ -16,7 +16,7 @@ class Parser:
     file: Optional[str]
     SPACE = frozenset(" \t")
     STRING_QUOTE = format("\"'")
-    TAML_TOKEN = ("---\n", "\n...")
+    YAML_TOKEN = (re.compile(r"---\n"), re.compile(r"\n\s*\.\.\."))
     tag_def = re.compile(r"(?P<name>[\w]+)(?:\&(?P<alias>[\w]+))?(?=$|\s|\n)")
     tag_name = re.compile(r"(?P<name>\w[\w\d\:]*)\=")
     decimal = re.compile(r"([+\-]?\d+(?:\.\d+)?)(?=$|\s|\n)")
@@ -131,17 +131,20 @@ class Parser:
             return []
 
     def parse_next_value(self):
-        if self.text[self.idx :].startswith(Parser.YAML_TOKEN[0]):
+        if (
+            begin := Parser.YAML_TOKEN[0].search(self.text, self.idx)
+        ) is not None and begin.span()[0] == self.idx:
             self.idx += 4
             begin = self.idx
-            end = self.text.find(Parser.YAML_TOKEN[1], self.idx)
-            if end == -1:
+            end = Parser.YAML_TOKEN[1].search(self.text, self.idx)
+            if end is None:
                 raise Parser.SyntaxError(
-                    "Untermated yaml markup", self.py_stack()
+                    "Untermated yaml markup" + self.py_stack()
                 )
             else:
-                self.idx = end + len(Parser.YAML_TOKEN[1])
-                return types.EYamlCode(self.text[begin:end])
+                self.idx = end.span()[1] + 1
+                print(self)
+                return types.EYamlCode(self.text[begin : end.span()[0]])
         elif (m := Parser.const_var.search(self.text, self.idx)) and m.span()[
             0
         ] == self.idx:

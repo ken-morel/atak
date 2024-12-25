@@ -148,6 +148,35 @@ class EStr(EObject):
         return self.value % namespace
 
 
+@annotate
+class EYamlCode(EObject):
+    """Yaml code insertion."""
+
+    code: str
+
+    @annotate
+    def __init__(self, code: str):
+        """Pass in the yaml code."""
+        self.code = code
+        lines = code.splitlines()
+        ln = lines[0]
+        indent = 0
+        while ln.startswith(" "):
+            indent += 1
+        for i in range(len(lines)):
+            lines[i] = lines[i][indent:]
+        self.code = "\n".join(lines)
+
+    @annotate
+    def eval(
+        self, namespace: "efus.namespace.Namespace"
+    ) -> typing.Union[dict, str, int, list]:
+        """Evaluate yaml object or literal."""
+        import yaml
+
+        return yaml.safe_load(self.code)
+
+
 class EInstr(EObject):
     """Efus instruction base."""
 
