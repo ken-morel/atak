@@ -6,11 +6,12 @@ Subscribeable and Subscriber classes.
 
 """
 
-from pyoload import *
+import pyoload
+
 from typing import Callable
 
 
-@annotate
+@pyoload
 class Subscriber:
     """
     Efus Subcriber.
@@ -25,13 +26,13 @@ class Subscriber:
         """Initialize the Subscriber with default values."""
         self._subscribing = []
 
-    @annotate
+    @pyoload
     def subscribe_to(self, subscribeable: "Subscribeable", callback: Callable):
         """Subscribe to the specified subscribeable object."""
         subscribeable.add_subscriber(callback, self)
         self._subscribing.append((callback, subscribeable))
 
-    @annotate
+    @pyoload
     def unsubscribe_from(self, subscript: "Subscribeable"):
         """Remove all subscriptions with asscociated Subscribeable."""
         for callback, subscribeable in self._subscribing:
@@ -39,23 +40,23 @@ class Subscriber:
                 pass
 
 
-@annotate
+@pyoload
 class Subscribeable:
     """Subscribeable object."""
 
     _subscribed: list[tuple[Callable, Subscriber]]
 
-    @annotate
+    @pyoload
     def __init__(self):
         """Initialize the subscribeable with defaults."""
         self._subscribed = []
 
-    @annotate
+    @pyoload
     def add_subscriber(self, callback: Callable, subscriber: Subscriber):
         """Add the specified subscriber to subscribers list."""
         self._subscribed.append((callback, subscriber))
 
-    @annotate
+    @pyoload
     def warn_subscribers(self):
         """Call all callbacks registerd as subscribed."""
         for callback, _ in self._subscribed.copy():

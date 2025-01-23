@@ -1,12 +1,13 @@
 """Efus parser class and functions."""
 import re
 
+import pyoload
+
 from . import types
-from pyoload import *
 from typing import Optional
 
 
-@annotate
+@pyoload
 class Parser:
     """Efus code parser class."""
 
@@ -42,7 +43,7 @@ class Parser:
     class SyntaxError(SyntaxError):
         """Efus code syntax error."""
 
-    @annotate
+    @pyoload
     def __init__(self, file: str = None):
         """Create an efus code parser with optional given file."""
         self.idx = 0
@@ -51,14 +52,14 @@ class Parser:
         self.parsed = []
         self.file = file
 
-    @annotate
+    @pyoload
     def feed(self, text: str) -> "types.RootDef":
         """Feed code in parser."""
         self.text += text
         self.go_ahead()
         return self.tree[0][1]
 
-    @annotate
+    @pyoload
     def go_ahead(self):
         """Read and interpret the next instructions."""
         while True:  # For each logical line
@@ -86,7 +87,7 @@ class Parser:
             else:
                 raise Exception()
 
-    @annotate
+    @pyoload
     def _queue_instr(self, indent: int, instr: "types.EInstr"):
         if len(self.tree) == 0:
             self.tree = [(indent, instr)]
@@ -108,7 +109,7 @@ class Parser:
                 self.tree[-1][1].add_child_instruction(instr)
                 self.tree.append((indent, instr))
 
-    @annotate
+    @pyoload
     def parse_attrs(self) -> "list[tuple[str, types.EObject]]":
         """Parse next following attrs.."""
         attrs = []
@@ -119,7 +120,7 @@ class Parser:
             pass
         return attrs
 
-    @annotate
+    @pyoload
     def parse_next_attr_value(self) -> list[tuple]:
         self.inline_spaces()
         name = Parser.tag_name.search(self.text, self.idx)
@@ -299,12 +300,12 @@ class Parser:
         )
 
 
-@annotate
+@pyoload
 def parse_file(path: str) -> "types.Efus":
     with open(path) as f:
         return parse_code(f.read(), path)
 
 
-@annotate
+@pyoload
 def parse_code(code: str, file: str = "<string>") -> "types.Efus":
     return types.Efus(Parser(file).feed(code))

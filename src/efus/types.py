@@ -8,9 +8,10 @@ import efus
 
 from . import component
 
+import pyoload
+
 from . import subscribe
 from abc import ABC
-from pyoload import *
 
 
 class EObject(ABC, subscribe.Subscribeable):
@@ -21,7 +22,7 @@ class EObject(ABC, subscribe.Subscribeable):
         if value is not None:
             self.value = value
 
-    @annotate
+    @pyoload
     def eval(self, namespace: "efus.namespace.Namespace"):
         """Evaluate to a python object."""
         raise NotImplementedError(
@@ -61,7 +62,7 @@ class ENilType(EObject):
         return "ENil"
 
     @classmethod
-    @annotate
+    @pyoload
     def eval(cls, namespace: "efus.namespace.Namespace") -> "ENilType":
         """Convert ENil to python ENil(aka return ENil)."""
         return cls()
@@ -95,7 +96,7 @@ class EAllType(EObject):
         return 1
 
     @classmethod
-    @annotate
+    @pyoload
     def eval(cls, namespace: "efus.namespace.Namespace") -> "ENilType":
         """Convert EAll to python EAll(aka return EAll)."""
         return cls()
@@ -107,7 +108,7 @@ class EAllType(EObject):
 EAll = EAllType()
 
 
-@annotate
+@pyoload
 class ENumber(EObject):
     """Efus Number object."""
 
@@ -123,13 +124,13 @@ class ENumber(EObject):
     def cast_to(self, type: typing.Any, namespace: type(None) = None):
         return type(self.value)
 
-    @annotate
+    @pyoload
     def eval(self, namespace: "efus.namespace.Namespace") -> int | float:
         """Return the python float or int."""
         return self.value
 
 
-@annotate
+@pyoload
 class EStr(EObject):
     """Efus Integer object."""
 
@@ -142,19 +143,19 @@ class EStr(EObject):
     def cast_to(self, type: typing.Any, namespace: type(None) = None):
         return type(self.value)
 
-    @annotate
+    @pyoload
     def eval(self, namespace: "efus.namespace.Namespace") -> str:
         """Return python string."""
         return self.value % namespace
 
 
-@annotate
+@pyoload
 class EYamlCode(EObject):
     """Yaml code insertion."""
 
     code: str
 
-    @annotate
+    @pyoload
     def __init__(self, code: str):
         """Pass in the yaml code."""
         self.code = code
@@ -167,7 +168,7 @@ class EYamlCode(EObject):
             lines[i] = lines[i][indent:]
         self.code = "\n".join(lines)
 
-    @annotate
+    @pyoload
     def eval(
         self, namespace: "efus.namespace.Namespace"
     ) -> typing.Union[dict, str, int, list]:
@@ -182,12 +183,12 @@ class EInstr(EObject):
 
     children: "list[EInstr]"
 
-    @annotate
+    @pyoload
     def add_child_instruction(self, child: "EInstr") -> None:
         """Add child instruction."""
         self.children.append(child)
 
-    @annotate
+    @pyoload
     def eval(
         self,
         namespace: "efus.namespace.Namespace",
@@ -200,7 +201,7 @@ class EInstr(EObject):
             self_component.add_child_component(child_component)
         return self_component
 
-    @annotate
+    @pyoload
     def _eval(
         self,
         namespace: "efus.namespace.Namespace",
@@ -210,7 +211,7 @@ class EInstr(EObject):
 
 
 @dataclasses.dataclass
-@annotate
+@pyoload
 class TagDef(EInstr):
     """Tag definition code."""
 
@@ -219,7 +220,7 @@ class TagDef(EInstr):
     attributes: dict
     children: list[EInstr] = dataclasses.field(default_factory=list)
 
-    @annotate
+    @pyoload
     def _eval(
         self,
         namespace: "efus.namespace.Namespace",
@@ -241,13 +242,13 @@ class TagDef(EInstr):
 
 
 @dataclasses.dataclass
-@annotate
+@pyoload
 class RootDef(EInstr):
     """Tag definition code."""
 
     children: list[EInstr] = dataclasses.field(default_factory=list)
 
-    @annotate
+    @pyoload
     def eval(
         self,
         namespace: "efus.namespace.Namespace",
@@ -268,7 +269,7 @@ class RootDef(EInstr):
 
 
 @dataclasses.dataclass
-@annotate
+@pyoload
 class UsingDef(EInstr):
     """Tag definition code."""
 
@@ -276,7 +277,7 @@ class UsingDef(EInstr):
     names: typing.Optional[tuple[str]]
     children: list[EInstr] = dataclasses.field(default_factory=list)
 
-    @annotate
+    @pyoload
     def eval(
         self,
         namespace: "efus.namespace.Namespace",
@@ -285,22 +286,22 @@ class UsingDef(EInstr):
         namespace.import_module(self.module, names=self.names or "all")
 
 
-@annotate
+@pyoload
 class Efus(EObject):
     """Efus source code base."""
 
     parent_instruction: EInstr
 
-    @annotate
+    @pyoload
     def __init__(self, parent_instruction: EInstr):
         """Create efus code object."""
         self.parent_instruction = parent_instruction
 
-    @annotate
+    @pyoload
     def __repr__(self):
         return str(self.parent_instruction)
 
-    @annotate
+    @pyoload
     def translate(
         self,
         namespace: "efus.namespace.Namespace",
@@ -312,7 +313,7 @@ class Efus(EObject):
     eval = translate
 
 
-@annotate
+@pyoload
 class EScalar(EObject):
     """Efus variable scalar multiple."""
 
@@ -330,20 +331,20 @@ class EScalar(EObject):
     ):
         return type(self.eval(namespace))
 
-    @annotate
+    @pyoload
     def __init__(self, coefficient: int | float, multiple: str):
         """Create a scalar multiple of multiple."""
         super().__init__()
         self.coefficient = coefficient
         self.multiple = multiple
 
-    @annotate
+    @pyoload
     def eval(self, namespace: "efus.namespace.Namespace") -> typing.Any:
         """Return the scalar product of multiple and coefficient."""
         return self.coefficient * namespace.get_name(self.multiple)
 
 
-@annotate
+@pyoload
 class EPix:
     """
     Efus Pixels class.
@@ -359,8 +360,12 @@ class EPix:
     def cast_to(cls, type: typing.Any, namespace: type(None) = None):
         return type(self.coeff)
 
-    @annotate(
-        comments=dict(coeff="Pixel coefficient can only be a whole number.")
+    @pyoload(
+        validators=dict(
+            coeff=lambda v: None
+            if isinstance(v, int)
+            else "Pixel coefficient can only be a whole number."
+        )
     )
     def __init__(self, coeff: int = 1):
         """Create a Pixels object."""
@@ -411,7 +416,7 @@ class EPix:
 px = EPix(1)
 
 
-@annotate
+@pyoload
 class ESize(EObject):
     value: tuple[int | float, int | float]
 
@@ -425,7 +430,7 @@ class ESize(EObject):
     def cast_to(cls, type: typing.Any, namespace: type(None) = None):
         return type(self.value)
 
-    @annotate
+    @pyoload
     def __init__(
         self,
         width: int | float | tuple[int | float, int | float] = 0,
@@ -481,7 +486,7 @@ class ESize(EObject):
         return self
 
 
-@annotate
+@pyoload
 class EVar(EObject):
     """Efus variable alias."""
 
@@ -499,13 +504,13 @@ class EVar(EObject):
     ):
         return type(self.eval(namespace))
 
-    @annotate
+    @pyoload
     def __init__(self, name: str):
         """Create a named variable alias."""
         super().__init__()
         self.name = name
 
-    @annotate
+    @pyoload
     def eval(self, namespace: "efus.namespace.Namespace") -> typing.Any:
         """Get the given variavle in the namespace."""
         return namespace.get_name(self.name)
@@ -514,7 +519,7 @@ class EVar(EObject):
         return f"EVar({self.name})"
 
 
-@annotate
+@pyoload
 class EExpr(EObject):
     """Efus expression."""
 
@@ -532,24 +537,24 @@ class EExpr(EObject):
     ):
         return type(self.eval(namespace))
 
-    @annotate
+    @pyoload
     def __init__(self, expr: str):
         """Create a named variable alias."""
         super().__init__()
         self.expr = expr
 
-    @annotate
+    @pyoload
     def eval(self, namespace: "efus.namespace.Namespace") -> typing.Any:
         """Get the given variavle in the namespace."""
         return eval(self.expr, namespace)
 
 
-@annotate
+@pyoload
 class Binding(EObject, subscribe.Subscribeable):
     """Create a Writeable with subscribers and methods."""
 
     @classmethod
-    @annotate
+    @pyoload
     def from_get_set(
         cls,
         namespace: "efus.namespace.Namespace",
@@ -643,7 +648,7 @@ class Binding(EObject, subscribe.Subscribeable):
         return self.getter()
 
 
-@annotate
+@pyoload
 class ENameBinding(Binding):
     name: str
 
@@ -659,11 +664,11 @@ class ENameBinding(Binding):
     ):
         return type(self.eval(namespace))
 
-    @annotate
+    @pyoload
     def __init__(self, name: str):
         self.name = name
 
-    @annotate
+    @pyoload
     def eval(
         self, namespace: "efus.namespace.Namespace"
     ) -> "efus.namespace.NameBinding":

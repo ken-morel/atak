@@ -13,11 +13,12 @@ import typing
 
 import efus.parser
 
+import pyoload
+
 from . import namespace
 from . import subscribe
 from . import types
 from pathlib import Path
-from pyoload import *
 from types import UnionType
 from types import UnionType
 
@@ -30,7 +31,7 @@ ParamDef = dict[
 ]
 
 
-@annotate
+@pyoload
 class CompParams:
     """
     Component parameters holder.
@@ -43,14 +44,14 @@ class CompParams:
     params: dict[str, tuple[typing.Any, typing.Any]]
     component_name: str
 
-    @annotate
+    @pyoload
     def __init__(self, params: ParamDef, component_name: str):
         """Pass in the parameters to handle."""
         self.params = params
         self.component_name = component_name
 
     @classmethod
-    @annotate
+    @pyoload
     def from_class(cls, defcls, component_name: str = "<unknown component>"):
         return cls(cls._defs_from_class(defcls), component_name)
 
@@ -90,14 +91,14 @@ def _decomposed_union(type):
         return (type,)
 
 
-@annotate
+@pyoload
 class CompArgs(dict, subscribe.Subscribeable):
     # params: CompParams
     values: "dict[str, types.EObject]"
     namespace: "typing.Optional[namespace.Namespace]"
     subscriber: "subscribe.Subscriber"
 
-    @annotate
+    @pyoload
     def __init__(
         self,
         params: CompParams,
@@ -218,14 +219,14 @@ class CompArgs(dict, subscribe.Subscribeable):
                     raise
                 raise NotImplementedError(val, spec)
 
-    @annotate
+    @pyoload
     def arg_changed(self, name: str):
         self.eval(only_name=name)
         self.warn_subscribers()
         return self
 
 
-@annotate
+@pyoload
 class Component(subscribe.Subscriber):
     namespace: "namespace.Namespace"
     subscriber: "subscribe.Subscriber"
@@ -237,7 +238,7 @@ class Component(subscribe.Subscriber):
         """Add `component` to self children."""
         self.children.append(component)
 
-    @annotate
+    @pyoload
     def __init__(
         self,
         namespace: "namespace.Namespace",
@@ -253,7 +254,7 @@ class Component(subscribe.Subscriber):
         self.children = []
         self.init()
 
-    @annotate
+    @pyoload
     def _namespace_change(self):
         self.args.eval()
         self.update()
@@ -305,7 +306,7 @@ class Comp2nent(Component):
                 )
             )
 
-    @annotate
+    @pyoload
     def __init__(
         self,
         namespace: "typing.Optional[namespace.Namespace]",
@@ -359,7 +360,7 @@ class Comp2nent(Component):
         self.namespace[name] = val
 
     @classmethod
-    @annotate
+    @pyoload
     def create(
         cls,
         np: namespace.Namespace,
@@ -372,7 +373,7 @@ class Comp2nent(Component):
         return cls(np, cls.params.bind(attrs, namespace), pc)
 
     @classmethod
-    @annotate
+    @pyoload
     def make(cls, attrs: dict[str, typing.Any] = {}) -> "Comp2nent":
         np = namespace.Namespace()
         return cls(

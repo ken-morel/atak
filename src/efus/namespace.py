@@ -6,14 +6,15 @@ import functools
 import importlib
 import typing
 
+import pyoload
+
 from . import subscribe
 from . import types
-from pyoload import *
 
 # from .parser import types
 
 
-@annotate
+@pyoload
 class Namespace(dict, subscribe.Subscribeable):
     """Component namespace."""
 
@@ -22,14 +23,14 @@ class Namespace(dict, subscribe.Subscribeable):
 
     @classmethod
     @functools.cache
-    @annotate
+    @pyoload
     def defaults(cls) -> dict[str, typing.Any]:
         """Get default and basic namespace variables provided by efus."""
         from . import constants
 
         return {k: v for k, v in vars(constants).items() if not k[0] == "_"}
 
-    @annotate
+    @pyoload
     def __init__(self, parents: "tuple[Namespace]" = (), default: dict = {}):
         """Initialize with default value."""
         self.dirty = False
@@ -54,7 +55,7 @@ class Namespace(dict, subscribe.Subscribeable):
             return True
         return False
 
-    @annotate
+    @pyoload
     def get_name(self, name: str) -> typing.Any:
         """
         Return name or raise error.
@@ -66,7 +67,7 @@ class Namespace(dict, subscribe.Subscribeable):
         else:
             raise NameError(f"Name: {name} not in namespace {self!r}.")
 
-    @annotate
+    @pyoload
     def get(
         self, name: str, head: "typing.Optional[Namespace]" = None
     ) -> typing.Any:
@@ -82,7 +83,7 @@ class Namespace(dict, subscribe.Subscribeable):
             else:
                 return types.ENil
 
-    @annotate
+    @pyoload
     def import_module(
         self,
         module: str,
@@ -100,12 +101,12 @@ class Namespace(dict, subscribe.Subscribeable):
         for name in names:
             self[name] = getattr(mod, name)
 
-    @annotate
+    @pyoload
     def create_binding(self, name: str) -> "NameBinding":
         return NameBinding(self, name)
 
     @contextlib.contextmanager
-    @annotate
+    @pyoload
     def save(self):
         current = dict.copy(self)
         yield
@@ -113,14 +114,14 @@ class Namespace(dict, subscribe.Subscribeable):
         dict.update(self, current)
 
 
-@annotate
+@pyoload
 class NameBinding(types.Binding, subscribe.Subscribeable):
     name: str
     namespace: Namespace
     subscriber: subscribe.Subscriber
     _last: typing.Any
 
-    @annotate
+    @pyoload
     def __init__(self, namespace: Namespace, name: str):
         self.subscriber = subscribe.Subscriber()
         self.name = name
