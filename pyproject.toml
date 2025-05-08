@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "efus"
+version = "0.1.0"
+dependencies = [
+    "pyoload>=3.0.0"
+]
+authors = [
+    {name = "Engon Ken Morel", email = "engonken8@gmail.com"}
+]
+maintainers = [
+    {name = "Engon Ken Morel", email = "engonken8@gmail.com"}
+]
+description = "Efus component language."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["components", "efus"]
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    "Development Status :: 3 - Alpha",
+
+    # Indicate who your project is intended for
+    "Intended Audience :: Developers",
+    # "Topic :: Software Development :: Build Tools",
+
+    # Pick your license as you wish (see also "license" above)
+    "License :: OSI Approved :: MIT License",
+
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/ken-morel/efus"
+Documentation = "https://python-efus.readthedocs.org"
+Repository = "https://github.com/ken-morel/efus.git"
+Issues = "https://github.com/ken-morel/efus/issues"
+
+[project.scripts]
+efus = "efus.parser:__main__"

@@ -1,0 +1,44 @@
+{
+	"folders":
+	[
+		{
+			"path": "/home/engon/Documents/efus",
+		},
+	],
+	"build_systems": [
+		{
+			"name": "run",
+				"cmd": ["python3", "/home/engon/Documents/testings/main.py"],
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"selector": "source.python",
+			"working_dir": "/home/engon/Documents/testings",
+
+			"env": {"PYTHONIOENCODING": "utf-8",},
+
+			"variants":
+			[
+				{
+					"name": "Syntax Check",
+					"cmd": ["python3", "-m", "py_compile", "$file"],
+
+					"windows": {
+						"cmd": ["py", "-m", "py_compile", "$file"],
+					},
+				}
+			],
+		},
+
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "\"/home/engon/Documents/efus/bin/python\" -u \"$file\"",
+		},
+	],
+	"settings": {
+	    "python_interpreter": "/home/engon/Documents/efus/bin/python",
+	    "test_command": "pytest",
+	    "test_virtualenv": "/home/engon/Documents/efus",
+	    "test_project_path": "/home/engon/Documents/efus",
+	},
+}
