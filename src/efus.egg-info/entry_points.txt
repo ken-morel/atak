@@ -1,2 +1,0 @@
-[console_scripts]
-efus = efus.parser:__main__

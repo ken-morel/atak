@@ -1,2 +1,0 @@
-tk&root title="Hello world" size=500x200
-	label text="banana" pos:pack=true
