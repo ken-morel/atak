@@ -1,21 +1,21 @@
-const Namespace = struct {
+pub const Namespace = struct {
     parent: ?*Namespace, // Optional parent namespace (for scoping)
-    symbols: std.StringHashMap(Value),
+    symbols: std.StringHashMap(EObject),
     allocator: Allocator,
 
     pub fn init(allocator: Allocator, parent: ?*Namespace) Namespace {
         return .{
             .parent = parent,
-            .symbols = std.StringHashMap(Value).init(allocator),
+            .symbols = std.StringHashMap(EObject).init(allocator),
             .allocator = allocator,
         };
     }
 
-    pub fn define(self: *Namespace, name: []const u8, value: Value) !void {
+    pub fn set(self: *Namespace, name: []const u8, value: EObject) !void {
         try self.symbols.put(name, value);
     }
 
-    pub fn lookup(self: *Namespace, name: []const u8) ?Value {
+    pub fn get(self: *Namespace, name: []const u8) ?EObject {
         if (self.symbols.get(name)) |val| return val;
         if (self.parent) |parent| return parent.lookup(name);
         return null;
@@ -25,5 +25,5 @@ const Namespace = struct {
 const std = @import("std");
 const Allocator = std.mem.Allocator;
 
-const objects = @import("objects.zig");
-const Value = objects.Value;
+const objs = @import("objects.zig");
+const EObject = objs.EObject;
