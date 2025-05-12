@@ -1,11 +1,12 @@
 pub const RendererBackend = struct {
-    mount: *const fn (component: *Component) anyerror!Mount,
-    update: *const fn (component: *Component, mount: Mount) anyerror!void,
-    unmount: ?*const fn (component: *Component, mount: Mount) void = null,
+    mount: *const fn (component: *Component) anyerror!void,
+    update: *const fn (component: *Component) anyerror!void,
+    unmount: *const fn (component: *Component) anyerror!void,
+    init: *const fn (component: *Component, master: ?Component) anyerror!void,
 };
 
 pub const Mount = struct {
-    widget: *anyopaque,
+    widget: ?*anyopaque,
 };
 
 const objs = @import("objects.zig");
