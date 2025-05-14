@@ -6,6 +6,7 @@ pub const attributemanager = @import("efus/attributemanager.zig");
 pub const EArguments = attributemanager.EArguments;
 pub const EArgument = attributemanager.EArgument;
 pub const EParameter = attributemanager.EParameter;
+pub const EParameters = attributemanager.EParameters;
 pub const EAttribute = attributemanager.EAttribute;
 pub const EAttributeManager = attributemanager.EAttributeManager;
 

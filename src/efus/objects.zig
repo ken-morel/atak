@@ -37,6 +37,21 @@ pub const EObject = struct {
             .Float => EType.Float,
             .Boolean => EType.Boolean,
             .Undefined => EType.Undefined,
+            .Null => EType.Null,
+            .Template => EType.Template,
+            .Component => EType.Component,
+        };
+    }
+    pub fn getType(self: *const EObject) ?EType {
+        return switch (self.value) {
+            .String => EType.String,
+            .Integer => EType.Integer,
+            .Float => EType.Float,
+            .Boolean => EType.Boolean,
+            .Undefined => EType.Undefined,
+            .Null => EType.Null,
+            .Template => EType.Template,
+            .Component => EType.Component,
         };
     }
 };

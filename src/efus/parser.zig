@@ -67,11 +67,14 @@ pub const Parser = struct {
         }
     }
     pub fn next_inline(self: *Parser) !void {
-        self.index += 1;
         if (self.index >= self.text.len) {
             return EfusError.EndOfFile;
         } else if (self.char() == '\n') {
             return EfusError.EndOfLine;
+        }
+        self.index += 1;
+        if (self.index >= self.text.len) {
+            return EfusError.EndOfFile;
         }
     }
     pub fn parse_compcall(self: *Parser) !?InstantiateComponent {
@@ -111,6 +114,7 @@ pub const Parser = struct {
         }
     }
     fn parse_compcallargs(self: *Parser) !std.ArrayList(InstantiateComponentArgument) {
+        print("parsing args at index {any} in \n", .{self.index});
         var args = std.ArrayList(InstantiateComponentArgument).init(self.allocator);
         loop: while (true) {
             const arg = self.parse_next_key_eq_val() catch |err| {
@@ -119,12 +123,12 @@ pub const Parser = struct {
                     EfusError.EndOfFile => break :loop,
                     else => return err,
                 }
-            };
+            } orelse break;
             try args.append(arg.arg);
         }
         return args;
     }
-    fn parse_next_key_eq_val(self: *Parser) !struct { name: []const u8, arg: InstantiateComponentArgument } {
+    fn parse_next_key_eq_val(self: *Parser) !?struct { name: []const u8, arg: InstantiateComponentArgument } {
         const start = self.index;
         _ = try self.skip_inline_spaces();
         if (try self.parse_symbol()) |name| {
@@ -132,6 +136,7 @@ pub const Parser = struct {
                 return EfusError.ExpectedEqualToAfterParamName;
             }
             try self.next_inline();
+
             if (try self.parse_next_value()) |value| {
                 return .{
                     .name = name,
@@ -145,7 +150,7 @@ pub const Parser = struct {
             }
         } else {
             self.index = start;
-            return EfusError.ExpectedKeyValue;
+            return null;
         }
     }
     pub fn parse_next_value(self: *Parser) !?EObject {
@@ -160,7 +165,7 @@ pub const Parser = struct {
 
     pub fn parse_string(self: *Parser) !?EObject {
         if (self.char() != '"') return null;
-        try self.next_inline();
+        self.next_inline() catch {};
 
         const start = self.index;
         while (true) {
@@ -168,10 +173,10 @@ pub const Parser = struct {
                 return EfusError.UnterminatedString;
             } else if (self.char() == '"') {
                 const str = self.text[start..self.index];
-                try self.next_inline();
+                self.next_inline() catch {};
                 return EObject.init(.{ .String = str });
             }
-            try self.next_inline();
+            self.next_inline() catch {};
         }
     }
 

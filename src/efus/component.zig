@@ -2,7 +2,7 @@ pub const Component = struct {
     allocator: std.mem.Allocator,
     args: attributemanager.EAttributeManager,
     template: componenttemplate.ComponentTemplate,
-    namespace: Namespace,
+    namespace: *Namespace,
     _mount: ?backend.Mount = null,
     dirty: bool = false,
     children: std.ArrayList(Component),
@@ -20,7 +20,7 @@ pub const Component = struct {
     pub fn init(
         allocator: std.mem.Allocator,
         template: componenttemplate.ComponentTemplate,
-        namespace: Namespace,
+        namespace: *Namespace,
         args: attributemanager.EArguments,
     ) !Component {
         return Component{
@@ -40,6 +40,9 @@ pub const Component = struct {
         std.debug.print("Added child", .{});
         try self.children.append(child);
     }
+    pub fn arg(self: Component, name: []const u8) !?EObject {
+        return try self.args.get(self.namespace, name);
+    }
 };
 
 const std = @import("std");
@@ -47,3 +50,4 @@ const attributemanager = @import("attributemanager.zig");
 const backend = @import("backend.zig");
 const Namespace = @import("namespace.zig").Namespace;
 const componenttemplate = @import("componenttemplate.zig");
+const EObject = @import("objects.zig").EObject;

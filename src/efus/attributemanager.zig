@@ -12,7 +12,7 @@ pub const EParameters = struct {
 pub const EArgument = struct {
     value: EObject,
     evaluates: bool = false,
-    pub fn eval(self: *EArgument, _: Namespace) !EObject {
+    pub fn eval(self: *EArgument, _: *Namespace) !EObject {
         return self.value;
     }
 };
@@ -63,7 +63,7 @@ pub const EAttribute = struct {
             return EfusError.ArgumentTypeError;
         }
     }
-    pub fn eval(self: *EAttribute, names: Namespace) !EObject {
+    pub fn eval(self: *EAttribute, names: *Namespace) !EObject {
         return self.argument.eval(names);
     }
 };
@@ -110,6 +110,10 @@ pub const EAttributeManager = struct {
             .parameters = params,
             .attributes = attributes,
         };
+    }
+    pub fn get(self: *const EAttributeManager, names: *Namespace, name: []const u8) !?EObject {
+        var attr = self.attributes.get(name) orelse return null;
+        return try attr.eval(names);
     }
 };
 

@@ -6,7 +6,7 @@ pub const ComponentTemplate = struct {
     pub fn instantiate(
         self: ComponentTemplate,
         allocator: std.mem.Allocator,
-        namespace: Namespace,
+        namespace: *Namespace,
         args: attributemanager.EArguments,
         master: ?component.Component,
     ) !component.Component {
@@ -20,7 +20,6 @@ pub const ComponentTemplate = struct {
         return comp;
     }
 };
-
 const std = @import("std");
 const backend = @import("backend.zig");
 const attributemanager = @import("attributemanager.zig");

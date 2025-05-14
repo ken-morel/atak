@@ -50,28 +50,31 @@ pub const InstantiateComponent = struct {
     pub fn eval(self: *const InstantiateComponent, ctx: EvalContext) !?EObject {
         var parent_entry = findParentComponent(ctx.stack, self.indent);
 
-        const template = try ctx.namespace.getTemplate(self.componentName) orelse return EfusError.TemplateNotFound;
-
-        const comp = EObject.init(.{
-            .Component = try template.instantiate(
-                self.allocator,
-                ctx.namespace,
-                try EArguments.fromICArgs(self.allocator, self.arguments),
-                if (parent_entry) |parent|
-                    (if (parent.result) |result_ptr|
-                        result_ptr.* // Dereference the pointer to get the Component
+        if (try ctx.namespace.getTemplate(self.componentName)) |template| {
+            const comp = EObject.init(.{
+                .Component = try template.instantiate(
+                    self.allocator,
+                    ctx.namespace,
+                    try EArguments.fromICArgs(self.allocator, self.arguments),
+                    if (parent_entry) |parent|
+                        (if (parent.result) |result_ptr|
+                            result_ptr.* // Dereference the pointer to get the Component
+                        else
+                            null)
                     else
-                        null)
-                else
-                    null,
-            ),
-        });
-        if (parent_entry) |*parent| {
-            if (parent.result) |pcomp| {
-                try pcomp.addChild(comp.value.Component);
+                        null,
+                ),
+            });
+            if (parent_entry) |*parent| {
+                if (parent.result) |pcomp| {
+                    try pcomp.addChild(comp.value.Component);
+                }
             }
+            return comp;
+        } else {
+            std.debug.print("Template {s} Not found in namespace with {any} templates", .{ self.componentName, ctx.namespace.templates.count() });
+            return EfusError.TemplateNotFound;
         }
-        return comp;
     }
 };
 
@@ -122,10 +125,10 @@ fn findParentComponent(
 
 pub const EvalContext = struct {
     allocator: std.mem.Allocator,
-    namespace: Namespace,
+    namespace: *Namespace,
     stack: std.ArrayList(StackEntry),
 
-    pub fn init(allocator: std.mem.Allocator, names: Namespace) EvalContext {
+    pub fn init(allocator: std.mem.Allocator, names: *Namespace) EvalContext {
         return .{
             .allocator = allocator,
             .namespace = names,
@@ -140,3 +143,5 @@ pub const EvalContext = struct {
         });
     }
 };
+
+// Opaque handle for C API
